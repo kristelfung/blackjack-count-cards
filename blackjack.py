@@ -5,7 +5,7 @@ import random
 
 class Deck:
   def __init__(self):
-    self.cards = []
+    self.cards = [] # [['A', 2, 'A♥'], ...] 
     
     suits = ["♦", "♣", "♥", "♠"]
     for i in range(2, 11):
@@ -73,9 +73,18 @@ class Table:
     card = self.shoe.pop()
     person.receive_cards(card)
 
-  def calculate_count(dealer, player):
-    for card in dealer.hand:
-      pass
+  def calculate_count(self, cards):
+    low = [2, 3, 4, 5, 6] # +1
+    high = [10, "J", "Q", "K", "A"] # -1
+    for card in cards:
+      if card[0] in low:
+        self.count += 1
+      elif card[0] in high:
+        self.count -= 1
+
+  def print_count(self):
+    print("Count is " + str(self.count))
+
 
 class Player:
   def __init__(self):
@@ -138,14 +147,16 @@ def main():
     # 3. Print hands.
     dealer.print_one_card()
     player.print_hand()
-    playing = False
     # 4. Print count.
-    #player.print_count()
+    table.calculate_count(player.hand)
+    table.calculate_count([dealer.hand[0]])
+    table.print_count()
     # 5. Ask player if they want to hit or stand.
 ##    val = input("Hit (H) or Stand (S)?")
 ##    while val != "H" or val != "S":
 ##      val = input("Please enter \"H\" for Hit and \"S\" for Stand!")
 ##    while val
+    playing = False
 
 
 if __name__ == "__main__":
