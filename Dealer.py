@@ -28,7 +28,7 @@ class Dealer:
         self.value += aces
 
   def receive_cards(self, hand):
-    self.hand = hand
+    self.hand += hand
     self.calculate_hand()
 
   def print_one_card(self):
@@ -53,4 +53,8 @@ class Dealer:
     while self.value < 17:
       print("Dealer hits.")
       table.deal_one_card(self)
+      self.calculate_hand()
       self.print_hand()
+
+  def is_bust(self):
+    return self.value > 21

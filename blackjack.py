@@ -4,6 +4,16 @@ from Deck import Deck
 from Table import Table
 import random
 
+def evaluate_round(dealer, player):
+  if dealer.is_bust():
+    print("Dealer bust, player WIN!")
+  elif player.value > dealer.value:
+    print("Player win.")
+  elif player.value < dealer.value:
+    print("Dealer win.")
+  else:
+    print("Tie.")
+
 def main():
   """ Initialize Decks on the Table """
   decks = []
@@ -11,7 +21,7 @@ def main():
     d = Deck()
     decks.append(d)
   table = Table(decks)
-  # table.shuffle() dsalfjdlsakfjklsafjkldasfjkldasjfklasdjfklasdfj
+  random.shuffle(table.shoe)
     
   """ Initialize Player and Dealer """
   player = Player()
@@ -54,10 +64,13 @@ def main():
 
     # 6. Dealer's move.
     if not player_bust:
-      print("dealer does stuff now")
-    else:
-      # the player loses their bet.
-      print("Bust! Lose bet of ")
+      dealer.play(table)
+      table.calculate_count(dealer.hand[1:])
+      table.print_count()
+      evaluate_round(dealer, player)
+    else: # the player loses their bet.
+      print("Bust! Lose bet of ___")
+    
     play_again = input("Another round? (Y/N) \n")
     play_again = play_again.lower()
     while play_again != "y" and play_again != "n":
@@ -66,6 +79,7 @@ def main():
     if play_again == "y":
       player.hand = []
       dealer.hand = []
+      print("\n")
     elif play_again == "n":
       playing = False
 
