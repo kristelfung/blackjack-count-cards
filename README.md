@@ -26,7 +26,7 @@ Summarized from [Bicycle Cards](https://bicyclecards.com/how-to-play/blackjack/)
 
 ### Placing Bets
 
-- Place a bet of Betting Unit * (true count - 1)
+- Place a bet of Betting Unit * (True Count - 1)
 
 For instance, if the betting unit is $25 and the true count is 2, we should place a bet of $25 * (2 - 1) = $25. 
 
