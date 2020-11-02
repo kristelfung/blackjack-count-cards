@@ -2,6 +2,7 @@ class Player:
   def __init__(self):
     self.hand = []
     self.value = None
+    self.bust = False
 
   def calculate_hand(self):
     self.value = 0

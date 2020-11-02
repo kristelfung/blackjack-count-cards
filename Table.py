@@ -26,4 +26,5 @@ class Table:
         self.count -= 1
 
   def print_count(self):
-    print("Count is " + str(self.count))
+    print("▸ Running Count is " + str(self.count))
+    print("▸ True Count is " + str(self.count / 4))
