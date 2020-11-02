@@ -19,7 +19,7 @@ def deal_cards(table, dealer, player):
 def player_turn(table, player):
   player.bust = False
   turn = True
-  while turn:
+  while turn and not player.natural:
     val = input("Hit (H) or Stand (S)? \n")
     val = val.lower()
     while val != "h" and val != "s":
@@ -49,7 +49,7 @@ def dealer_turn(table, dealer, player):
 
 def evaluate_round(dealer, player):
   if dealer.natural and player.natural:
-    print("Tie, both naturals.")
+    print("Tie, both naturals. Returned $" + str(player.bet))
     player.money += player.bet
   elif dealer.natural:
     print("Dealer natural. Lost $" + str(player.bet))
@@ -60,13 +60,19 @@ def evaluate_round(dealer, player):
     print("Dealer bust, player win! Won $" + str(player.bet))
     player.money += 2 * player.bet
   elif player.value > dealer.value:
-    print("Player win! Won $" + player.bet)
+    print("Player win! Won $" + str(player.bet))
     player.money += 2 * player.bet
   elif player.value < dealer.value:
-    print("Dealer win. Lost $" + player.bet)
+    print("Dealer win. Lost $" + str(player.bet))
   else:
     print("Tie. Returned $" + str(player.bet))
     player.money += player.bet
+
+def reset(dealer, player):
+  player.hand = []
+  dealer.hand = []
+  player.natural = False
+  dealer.natural = False
 
 def main():
   """ Initialize Decks on the Table """
@@ -84,7 +90,8 @@ def main():
   """ Start the game """
   playing = True
   while playing:
-    # 1. Ask for bet amounts
+    # 1. Ask for bet amounts and print count
+    table.print_count()
     player.ask_bet()
     # 2. Deal hands + print hands + print count
     deal_cards(table, dealer, player)
@@ -99,8 +106,7 @@ def main():
       play_again = input("Please enter \"Y\" to play again or \"N\" to quit.")
       play_again = play_again.lower()
     if play_again == "y":
-      player.hand = []
-      dealer.hand = []
+      reset(dealer, player)
       print("")
     elif play_again == "n":
       playing = False
