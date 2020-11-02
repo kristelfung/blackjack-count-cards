@@ -4,6 +4,7 @@ class Dealer:
     self.hand = []
 
   def calculate_hand(self):
+    self.value = 0
     aces = 0
     face_cards = ["J", "Q", "K"]
     for elem in self.hand:

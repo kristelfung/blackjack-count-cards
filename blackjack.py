@@ -50,7 +50,7 @@ def main():
         elif player.is_blackjack():
           player_turn = False
       elif val == "s":
-        turn = False
+        player_turn = False
 
     # 6. Dealer's move.
     if not player_bust:
