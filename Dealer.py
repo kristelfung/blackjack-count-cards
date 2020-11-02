@@ -32,5 +32,25 @@ class Dealer:
     self.calculate_hand()
 
   def print_one_card(self):
+    face_cards = ["J", "Q", "K"]
+    val = self.hand[0][0]
+    if self.hand[0][0] in face_cards:
+      val = 10
+    elif self.hand[0][0] == "A":
+      val = 11
     print("Dealer's hand: " + self.hand[0][2] + " [Hidden] ("
-          + str(self.value) + ")")
+          + str(val) + ")")
+
+  def print_hand(self):
+    msg = "Dealer's hand: "
+    for card in self.hand:
+      msg += card[2] + " "
+    msg += "(" + str(self.value) + ")"
+    print(msg)
+
+  def play(self, table):
+    self.print_hand()
+    while self.value < 17:
+      print("Dealer hits.")
+      table.deal_one_card(self)
+      self.print_hand()
