@@ -24,6 +24,13 @@ When the count is low, dealer advantage increases.
 
 Summarized from [Bicycle Cards](https://bicyclecards.com/how-to-play/blackjack/).
 
+### Payout
+- Player bust or lose: lose bet amount
+- Player win: receive bet amount
+- Player has natural and dealer does not have natural: receive 1.5x of bet amount
+- Dealer has natural and player does not: lose bet amount
+- Standoff (tie): take back bet / no change
+
 ### Placing Bets
 
 - Place a bet of Betting Unit * (True Count - 1)
