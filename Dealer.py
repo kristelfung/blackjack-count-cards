@@ -2,6 +2,7 @@ class Dealer:
   def __init__(self):
     self.value = 0
     self.hand = []
+    self.natural = False
 
   def calculate_hand(self):
     self.value = 0

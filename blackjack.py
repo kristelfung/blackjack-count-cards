@@ -8,6 +8,10 @@ def deal_cards(table, dealer, player):
   table.deal(dealer, player)
   dealer.print_one_card()
   player.print_hand()
+  if player.value == 21:
+    player.natural = True
+  if dealer.value == 21:
+    dealer.natural = True
   table.calculate_count(player.hand)
   table.calculate_count([dealer.hand[0]])
   table.print_count()
@@ -41,22 +45,33 @@ def dealer_turn(table, dealer, player):
     table.print_count()
     evaluate_round(dealer, player)
   else: # the player loses their bet.
-    print("Bust! Lose bet of ___")
+    print("Bust! Lost $" + str(player.bet))
 
 def evaluate_round(dealer, player):
-  if dealer.is_bust():
-    print("Dealer bust, player WIN!")
+  if dealer.natural and player.natural:
+    print("Tie, both naturals.")
+    player.money += player.bet
+  elif dealer.natural:
+    print("Dealer natural. Lost $" + str(player.bet))
+  elif player.natural:
+    print("Player natural! Won $" + str(player.bet * 1.5))
+    player.money += player.bet + player.bet * 1.5
+  elif dealer.is_bust():
+    print("Dealer bust, player win! Won $" + str(player.bet))
+    player.money += 2 * player.bet
   elif player.value > dealer.value:
-    print("Player win.")
+    print("Player win! Won $" + player.bet)
+    player.money += 2 * player.bet
   elif player.value < dealer.value:
-    print("Dealer win.")
+    print("Dealer win. Lost $" + player.bet)
   else:
-    print("Tie.")
+    print("Tie. Returned $" + str(player.bet))
+    player.money += player.bet
 
 def main():
   """ Initialize Decks on the Table """
   decks = []
-  for i in range(4):
+  for i in range(6):
     d = Deck()
     decks.append(d)
   table = Table(decks)
@@ -69,7 +84,8 @@ def main():
   """ Start the game """
   playing = True
   while playing:
-    # 1. Ask for bet amounts 
+    # 1. Ask for bet amounts
+    player.ask_bet()
     # 2. Deal hands + print hands + print count
     deal_cards(table, dealer, player)
     # 3. Player move
@@ -85,10 +101,9 @@ def main():
     if play_again == "y":
       player.hand = []
       dealer.hand = []
-      print("\n")
+      print("")
     elif play_again == "n":
       playing = False
-
 
 if __name__ == "__main__":
    main()

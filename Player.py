@@ -1,8 +1,11 @@
 class Player:
   def __init__(self):
     self.hand = []
+    self.money = 1000
+    self.bet = 0
     self.value = None
     self.bust = False
+    self.natural = False
 
   def calculate_hand(self):
     self.value = 0
@@ -39,6 +42,15 @@ class Player:
       msg += card[2] + " "
     msg += "(" + str(self.value) + ")"
     print(msg)
+
+  def ask_bet(self):
+    print("Currently have: $" + str(self.money))
+    bet = input("Place a bet: ")
+    bet = int(bet)
+    while bet > self.money:
+      bet = input("Not enough money, place a smaller bet: ")
+    self.money = self.money - bet
+    self.bet = bet
 
   def receive_cards(self, hand): # hand is an array of cards
     self.hand += hand
