@@ -26,6 +26,12 @@ class Player:
       else:
         self.value += aces
 
+  def is_bust(self):
+    return self.value > 21
+
+  def is_blackjack(self):
+    return self.value == 21
+
   def print_hand(self):
     msg = "Your hand: "
     for card in self.hand:

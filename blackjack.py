@@ -11,7 +11,7 @@ def main():
     d = Deck()
     decks.append(d)
   table = Table(decks)
-  # table.shuffle()
+  # table.shuffle() dsalfjdlsakfjklsafjkldasfjkldasjfklasdjfklasdfj
     
   """ Initialize Player and Dealer """
   player = Player()
@@ -31,21 +31,43 @@ def main():
     table.calculate_count([dealer.hand[0]])
     table.print_count()
     # 5. Ask player if they want to hit or stand.
-    turn = True
-    while turn:
+    player_bust = False
+    player_turn = True
+    while player_turn:
       val = input("Hit (H) or Stand (S)? \n")
       val = val.lower()
       while val != "h" and val != "s":
         val = input("Please enter \"H\" for Hit and \"S\" for Stand! \n")
-        print(val)
+        val = val.lower()
       if val == "h":
         table.deal_one_card(player)
-        player.calculate_hand()
         player.print_hand()
+        table.calculate_count([player.hand[len(player.hand)-1]])
+        table.print_count()
+        if player.is_bust():
+          player_bust = True
+          player_turn = False
+        elif player.is_blackjack():
+          player_turn = False
       elif val == "s":
         turn = False
-    print("dealer does stuff now")
-    playing = False
+
+    # 6. Dealer's move.
+    if not player_bust:
+      print("dealer does stuff now")
+    else:
+      # the player loses their bet.
+      print("Bust! Lose bet of ")
+    play_again = input("Another round? (Y/N) \n")
+    play_again = play_again.lower()
+    while play_again != "y" and play_again != "n":
+      play_again = input("Please enter \"Y\" to play again or \"N\" to quit.")
+      play_again = play_again.lower()
+    if play_again == "y":
+      player.hand = []
+      dealer.hand = []
+    elif play_again == "n":
+      playing = False
 
 
 if __name__ == "__main__":
