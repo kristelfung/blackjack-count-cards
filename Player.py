@@ -46,7 +46,7 @@ class Player:
   def ask_bet(self):
     print("Currently have: $" + str(self.money))
     bet = input("Place a bet: ")
-    bet = int(bet)
+    bet = float(bet)
     while bet > self.money:
       bet = input("Not enough money, place a smaller bet: ")
     self.money = self.money - bet
