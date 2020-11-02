@@ -29,7 +29,7 @@ def player_turn(table, player):
       table.deal_one_card(player)
       player.print_hand()
       table.calculate_count([player.hand[len(player.hand)-1]])
-      table.print_count()
+      #table.print_count()
       if player.is_bust():
         player.bust = True
         turn = False
@@ -42,7 +42,7 @@ def dealer_turn(table, dealer, player):
   if not player.bust:
     dealer.play(table)
     table.calculate_count(dealer.hand[1:])
-    table.print_count()
+    #table.print_count()
     evaluate_round(dealer, player)
   else: # the player loses their bet.
     print("Bust! Lost $" + str(player.bet))
@@ -100,6 +100,9 @@ def main():
     # 4. Dealer's move.
     dealer_turn(table, dealer, player)
     # 5. Ask to play again.
+    if player.money == 0:
+      print("Out of money!")
+      playing = False
     play_again = input("Another round? (Y/N) \n")
     play_again = play_again.lower()
     while play_again != "y" and play_again != "n":
