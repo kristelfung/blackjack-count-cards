@@ -45,7 +45,14 @@ class Player:
 
   def ask_bet(self):
     print("Currently have: $" + str(self.money))
-    bet = input("Place a bet: ")
+    valid_bet = False
+    while not valid_bet:
+      bet = input("Place a bet: ")
+      try:
+        bet = float(bet)
+        valid_bet = True
+      except:
+        print("Please enter a valid number.")
     bet = float(bet)
     while bet > self.money:
       bet = input("Not enough money, place a smaller bet: ")

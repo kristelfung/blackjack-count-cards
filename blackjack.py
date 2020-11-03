@@ -43,11 +43,11 @@ def dealer_turn(table, dealer, player):
     dealer.play(table)
     table.calculate_count(dealer.hand[1:])
     #table.print_count()
-    evaluate_round(dealer, player)
+    _evaluate_round(dealer, player)
   else: # the player loses their bet.
     print("Bust! Lost $" + str(player.bet))
 
-def evaluate_round(dealer, player):
+def _evaluate_round(dealer, player):
   if dealer.natural and player.natural:
     print("Tie, both naturals. Returned $" + str(player.bet))
     player.money += player.bet
@@ -68,7 +68,22 @@ def evaluate_round(dealer, player):
     print("Tie. Returned $" + str(player.bet))
     player.money += player.bet
 
-def reset(dealer, player):
+def play_again(dealer, player, playing):
+  if player.money == 0:
+    print("Out of money!")
+    playing = False
+  play_again = input("Another round? (Y/N) \n")
+  play_again = play_again.lower()
+  while play_again != "y" and play_again != "n":
+    play_again = input("Please enter \"Y\" to play again or \"N\" to quit. \n")
+    play_again = play_again.lower()
+  if play_again == "y":
+    _reset(dealer, player)
+    print("")
+  elif play_again == "n":
+    playing = False
+
+def _reset(dealer, player):
   player.hand = []
   dealer.hand = []
   player.natural = False
@@ -77,7 +92,7 @@ def reset(dealer, player):
 def main():
   """ Initialize Decks on the Table """
   decks = []
-  for i in range(6):
+  for i in range(4):
     d = Deck()
     decks.append(d)
   table = Table(decks)
@@ -100,19 +115,7 @@ def main():
     # 4. Dealer's move.
     dealer_turn(table, dealer, player)
     # 5. Ask to play again.
-    if player.money == 0:
-      print("Out of money!")
-      playing = False
-    play_again = input("Another round? (Y/N) \n")
-    play_again = play_again.lower()
-    while play_again != "y" and play_again != "n":
-      play_again = input("Please enter \"Y\" to play again or \"N\" to quit.")
-      play_again = play_again.lower()
-    if play_again == "y":
-      reset(dealer, player)
-      print("")
-    elif play_again == "n":
-      playing = False
+    play_again(dealer, player, playing)
 
 if __name__ == "__main__":
    main()
