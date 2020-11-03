@@ -12,14 +12,31 @@ def deal_cards(table, dealer, player):
     player.natural = True
   if dealer.value == 21:
     dealer.natural = True
+  if player.value == 9 or player.value == 10 or player.value == 11:
+    player.double_down = True
   table.calculate_count(player.hand)
   table.calculate_count([dealer.hand[0]])
   table.print_count()
 
 def player_turn(table, player):
-  player.bust = False
   turn = True
   while turn and not player.natural:
+    # Double Down?
+    if player.double_down:
+      dd = input("Total of " + str(player.value) + ". Double down? (Y/N) \n")
+      dd = dd.lower()
+      while dd != "y" and dd != "n":
+        dd = input("Please enter \"Y\" to double down or \"N\" to play as is. \n")
+        dd = dd.lower()
+      if dd == "y":
+        print("Bet additional " + str(player.bet))
+        player.money -= player.bet
+        player.bet *= 2
+        table.deal_one_card(player)
+        player.print_hand()
+        break
+    # Regular Round
+    player.double_down = False
     val = input("Hit (H) or Stand (S)? \n")
     val = val.lower()
     while val != "h" and val != "s":
@@ -87,6 +104,8 @@ def _reset(dealer, player):
   player.hand = []
   dealer.hand = []
   player.natural = False
+  player.bust = False
+  player.double_down = False
   dealer.natural = False
 
 def main():

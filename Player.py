@@ -6,6 +6,7 @@ class Player:
     self.value = None
     self.bust = False
     self.natural = False
+    self.double_down = False
 
   def calculate_hand(self):
     self.value = 0
