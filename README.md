@@ -38,3 +38,13 @@ Summarized from [Bicycle Cards](https://bicyclecards.com/how-to-play/blackjack/)
 For instance, if the betting unit is $25 and the true count is 2, we should place a bet of $25 * (2 - 1) = $25. 
 
 Summarized from [Card Counting | WIRED](https://www.youtube.com/watch?v=G_So72lFNIU).
+
+### Why Counting Works
+
+With a higher count:
+
+1. More blackjacks for everyone, but there is a 1.5x payout for the player.
+2. Insurance becomes profitable with a positive count (likely for dealer to blackjack too)
+3. More likely for dealer to bust on a high count.
+4. Double Down is profitable.
+5. Split 8, 9, 10-cards, or aces is profitable.
