@@ -43,8 +43,8 @@ Summarized from [Card Counting | WIRED](https://www.youtube.com/watch?v=G_So72lF
 
 With a higher count:
 
-1. More blackjacks for everyone, but there is a 1.5x payout for the player.
+1. More blackjacks for everyone, but there is a 1.5x payout for the player
 2. Insurance becomes profitable with a positive count (likely for dealer to blackjack too)
-3. More likely for dealer to bust on a high count.
-4. Double Down is profitable.
-5. Split 8, 9, 10-cards, or aces is profitable.
+3. More likely for dealer to bust on a high count
+4. Double Down is profitable
+5. Split 8, 9, 10-cards, or aces is profitable
