@@ -1,5 +1,8 @@
 # Blackjack - Counting Cards
 
+### Rules
+[Bicycle Cards](https://bicyclecards.com/how-to-play/blackjack/)
+
 ### Calculating Count
 
 Using the Hi-Lo method:
