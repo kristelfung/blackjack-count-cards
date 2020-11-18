@@ -9,12 +9,12 @@ class Table:
     random.shuffle(self.shoe)
 
   def deal(self, dealer, player):
-    dealer.receive_cards([self.shoe.pop(), self.shoe.pop()])
-    player.receive_cards([self.shoe.pop(), self.shoe.pop()])
+    dealer.init_cards([self.shoe.pop(), self.shoe.pop()])
+    player.init_cards([self.shoe.pop(), self.shoe.pop()])
 
-  def deal_one_card(self, person):
+  def deal_one_card(self, hand):
     card_hand = [self.shoe.pop()]
-    person.receive_cards(card_hand)
+    hand.receive_cards(card_hand)
 
   def calculate_count(self, cards):
     low = [2, 3, 4, 5, 6] # +1
