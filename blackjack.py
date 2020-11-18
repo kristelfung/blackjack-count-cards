@@ -147,11 +147,6 @@ def main():
     decks.append(d)
   table = Table(decks)
   random.shuffle(table.shoe)
-  # TEST ASDFKLJDASLKFJAS =====================
-  table.shoe.append(["Q", 2, "Q♥"])
-  table.shoe.append(["Q", 2, "Q♥"])
-  table.shoe.append(["A", 2, "A♥"])
-  table.shoe.append(["Q", 2, "Q♥"])
     
   """ Initialize Player and Dealer """
   player = Player()
