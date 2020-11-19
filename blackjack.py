@@ -123,10 +123,10 @@ def evaluate_round(dealer, player):
     print("Tie. Returned $" + str(player.bet))
     player.money += player.bet
 
-def play_again(dealer, player, playing):
+def play_again(dealer, player):
   if player.money == 0:
     print("Out of money!")
-    playing = False
+    return False
   play_again = input("Another round? (Y/N) \n")
   play_again = play_again.lower()
   while play_again != "y" and play_again != "n":
@@ -136,8 +136,9 @@ def play_again(dealer, player, playing):
     player.reset()
     dealer.reset()
     print("")
+    return True
   elif play_again == "n":
-    playing = False
+    return False
 
 def main():
   """ Initialize Decks on the Table """
@@ -171,7 +172,7 @@ def main():
       # 5b. Player busted
       print("Bust! Lost $" + str(player.bet))
     # 6. Ask to play again.
-    play_again(dealer, player, playing)
+    playing = play_again(dealer, player)
 
 if __name__ == "__main__":
    main()
