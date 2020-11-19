@@ -20,7 +20,7 @@ class Player:
     print("Your hand: ")
     print(self.hand)
 
-  def ask_bet(self): # TODO: A bit buggy on confirming input
+  def ask_bet(self):
     print("Currently have: $" + str(self.money))
     valid_bet = False
     bet = None
@@ -28,11 +28,12 @@ class Player:
       bet = input("Place a bet: ")
       try:
         bet = float(bet)
+        while bet > self.money:
+          bet = input("Not enough money, place a smaller bet: ")
+          bet = float(bet)
         valid_bet = True
       except:
         print("Please enter a valid number.")
-    while bet > self.money:
-      bet = input("Not enough money, place a smaller bet: ")
     self.money = self.money - bet
     self.bet = bet
 
@@ -43,12 +44,12 @@ class Player:
       ins = input("Buy insurance up to half the original bet: ")
       try:
         ins = float(ins)
+        while ins > self.bet / 2:
+          ins = input("Can only place up to half the original: ")
+          ins = float(ins)
         valid_ins = True
       except:
         print("Please enter a valid number.")
-    while ins > self.bet / 2:
-      ins = input("Can only place up to half the original: ")
-      ins = float(ins)
     self.money -= ins
     self.insurance = ins
 
