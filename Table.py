@@ -1,9 +1,16 @@
+import random
+from Deck import Deck
+
 class Table:
-  def __init__(self, decks):
+  def __init__(self, num_decks):
     self.shoe = []
     self.count = 0
-    for deck in decks:
-      self.shoe += deck.cards
+    self.shoe_size = num_decks * 52
+    self.num_decks = num_decks
+    for deck in range(num_decks):
+      d = Deck()
+      self.shoe += d.cards
+    self.shuffle()
 
   def shuffle(self):
     random.shuffle(self.shoe)
@@ -24,6 +31,16 @@ class Table:
         self.count += 1
       elif card[0] in high:
         self.count -= 1
+
+  def check_shoe_size(self):
+    if len(self.shoe) < self.shoe_size // 3:
+      print("1/3 cards used up; reshuffling shoe.")
+      self.count = 0
+      self.shoe = []
+      for deck in range(self.num_decks):
+        d = Deck()
+        self.shoe += d.cards
+      self.shuffle()
 
   def print_count(self):
     print("▸ Running Count is " + str(self.count))

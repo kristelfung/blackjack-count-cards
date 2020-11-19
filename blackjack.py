@@ -2,7 +2,6 @@ from Dealer import Dealer
 from Player import Player
 from Deck import Deck
 from Table import Table
-import random
 
 def deal_cards(table, dealer, player):
   table.deal(dealer, player)
@@ -141,13 +140,8 @@ def play_again(dealer, player):
     return False
 
 def main():
-  """ Initialize Decks on the Table """
-  decks = []
-  for i in range(4):
-    d = Deck()
-    decks.append(d)
-  table = Table(decks)
-  random.shuffle(table.shoe)
+  """ Initialize Table with 4 Decks """
+  table = Table(num_decks=4)
     
   """ Initialize Player and Dealer """
   player = Player()
@@ -157,6 +151,7 @@ def main():
   playing = True
   while playing:
     # 1. Ask for bet amounts and print count
+    table.check_shoe_size()
     table.print_count()
     player.ask_bet()
     # 2. Deal hands + print hands + print count
