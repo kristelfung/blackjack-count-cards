@@ -4,6 +4,22 @@ from Deck import Deck
 from Table import Table
 
 def deal_cards(table, dealer, player):
+  """
+  <Purpose>
+    Deals cards to dealer and player.
+
+  <Arguments>
+    table: instance of Table class
+    dealer: instance of Dealer class
+    player: instance of Player class
+
+  <Effect>
+    Deals cards to dealer and player.
+    Prints hands.
+    Checks for naturals / double down / split pairs.
+    Prints the count of the table.
+  """
+  
   table.deal(dealer, player)
   dealer.print_one_card()
   player.print_hand()
@@ -22,6 +38,19 @@ def deal_cards(table, dealer, player):
   table.print_count()
 
 def player_turn(table, player):
+  """
+  <Purpose>
+    Analyse player's turn.
+
+  <Arguments>
+    table: instance of Table class
+    player: instance of Player class
+
+  <Effect>
+    Checks for natural, double down, insurance, split pairs.
+    Call player methods (e.g. insurance, play hand) based on input.
+  """
+  
   if not player.hand.natural:
     # ASK: Double Down / Insurance / Split pairs
     dd = None
@@ -65,7 +94,21 @@ def player_turn(table, player):
     # Regular Round
     player.play_hand(table, player.hand)
 
-def player_bust(player): # -> returns bool of whether dealer should continue or not
+def player_bust(player):
+  """
+    <Purpose>
+      Checks if player hand(s) busted.
+      
+    <Arguments>
+      player: instance of Player class
+    
+    <Effect>
+      Checks the bust attribute of each Hand
+    
+    <Returns>
+      Boolean True if player busts, False if did not bust.
+  """
+  
   if player.split_hand:
     if player.split_hand.bust and player.hand.bust:
       return True
@@ -74,11 +117,35 @@ def player_bust(player): # -> returns bool of whether dealer should continue or 
   return False
 
 def dealer_turn(table, dealer, player):
+  """
+    <Purpose>
+      Calls the dealer's turn.
+
+    <Arguments>
+      table: instance of Table class
+      dealer: instance of Dealer class
+      player: instance of Player class
+
+    <Effect>
+      Calls play method for Dealer
+  """
+  
   dealer.play(table)
   table.calculate_count(dealer.hand.cards[1:])
-  #table.print_count()
 
 def evaluate_round(dealer, player):
+  """
+    <Purpose>
+      Evaluates the round: winner and bets.
+
+    <Arguments>
+      dealer: instance of Dealer class
+      player: instance of Player class
+
+    <Effect>
+      Adds/removes money from Player accordingly.
+  """
+  
   if dealer.hand.natural and player.hand.natural:
     print("Tie, both naturals. Returned $" + str(player.bet))
     player.money += player.bet
@@ -123,6 +190,18 @@ def evaluate_round(dealer, player):
     player.money += player.bet
 
 def play_again(dealer, player):
+  """
+    <Purpose>
+      Asks player if they want to play again.
+
+    <Arguments>
+      dealer: instance of Dealer class
+      player: instance of Player class
+
+    <Effect>
+      Continues or halts game.
+      Resets Player and Dealer.
+  """
   if player.money == 0:
     print("Out of money!")
     return False
@@ -140,14 +219,14 @@ def play_again(dealer, player):
     return False
 
 def main():
-  """ Initialize Table with 4 Decks """
+  # Initialize Table with 4 Decks
   table = Table(num_decks=4)
     
-  """ Initialize Player and Dealer """
+  # Initialize Player and Dealer
   player = Player()
   dealer = Dealer()
 
-  """ Start the game """
+  # Start the game
   playing = True
   while playing:
     # 1. Ask for bet amounts and print count
