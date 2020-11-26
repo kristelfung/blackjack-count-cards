@@ -68,7 +68,8 @@ def player_turn(table, player):
       while ins != "y" and ins != "n":
         ins = input("Please enter \"Y\" to buy insurance or \"N\" to play as is. \n")
         ins = ins.lower()
-    if player.can_split_pairs and (dd == "n" or dd == None):
+    if (player.can_split_pairs and (dd == "n" or dd == None) and
+        (ins == "n" or ins == None)):
       sp = input("You have two of the same kind. Split pairs? (Y/N) \n")
       sp = sp.lower()
       while sp != "y" and sp != "n":
