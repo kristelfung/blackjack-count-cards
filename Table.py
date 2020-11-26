@@ -2,6 +2,16 @@ import random
 from Deck import Deck
 
 class Table:
+  """
+  Table class 
+
+  Attributes:
+    shoe: list of cards in the form [['A', 1, 'A♠'], ['A', 2, 'A♥'], ...]
+    count: current running count
+    shoe_size: default number of cards in the shoe
+    num_decks: number of decks in the shoe
+  """
+
   def __init__(self, num_decks):
     self.shoe = []
     self.count = 0

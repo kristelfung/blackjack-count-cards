@@ -1,6 +1,21 @@
 from Hand import Hand
 
 class Player:
+  """
+  Player class
+
+  Attributes:
+    hand: Hand class representing player's hand
+    split_hand: Hand class if player decides to split
+    money: int representing how much money player has remaining
+    bet: int representing bet amount for the round
+    insurance: int representing insurance amount (always 1/2 of bet)
+    can_double_down: boolean if player can double down, set right after hand
+        dealt
+    can_insurance: boolean if player can insurance, set right after hand dealt
+    can_split_pairs: boolean if player can split pairs, set right after hand
+        dealt
+  """
   def __init__(self):
     self.hand = None
     self.split_hand = None

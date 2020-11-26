@@ -1,4 +1,14 @@
 class Hand:
+  """
+  Hand class
+
+  Attributes:
+    cards: a list of cards in the form [['A', 1, 'A♠'], ['A', 2, 'A♥'], ...]
+    value: int representing the value of the hand
+    bust: boolean indicating whether hand is bust or not
+    blackjack: boolean indicating whether hand is blackjack or not
+    natural: boolean indicating whether hand is a natural or not
+  """
   def __init__(self, hand):
     self.cards = hand
     self.value = None

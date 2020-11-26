@@ -1,6 +1,12 @@
 from Hand import Hand
 
 class Dealer:
+  """
+  Dealer class
+
+  Attributes:
+    hand: Hand class representing dealer's hand
+  """
   def __init__(self):
     self.hand = None
 

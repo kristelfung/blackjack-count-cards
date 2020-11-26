@@ -1,6 +1,13 @@
 class Deck:
+  """
+  Deck class
+
+  Attributes:
+    cards: list of cards in the form [['A', 1, 'A♠'], ['A', 2, 'A♥'], ...]
+  """
+  
   def __init__(self):
-    self.cards = [] # [['A', 2, 'A♥'], ...] 
+    self.cards = [] 
     
     suits = ["♦", "♣", "♥", "♠"]
     for i in range(2, 11):
