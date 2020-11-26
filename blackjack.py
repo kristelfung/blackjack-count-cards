@@ -84,7 +84,7 @@ def player_turn(table, player):
       table.deal_one_card(player.hand)
       player.print_hand()
       return
-    if ins == "y":
+    elif ins == "y":
       player.ask_insurance()
     elif sp == "y":
       player.split_pairs()
