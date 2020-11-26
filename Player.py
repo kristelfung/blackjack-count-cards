@@ -21,6 +21,7 @@ class Player:
     self.split_hand = None
     self.money = 1000
     self.bet = 0
+    self.split_hand_bet = 0
     self.insurance = 0
     self.can_double_down = False
     self.can_insurance = False
@@ -68,9 +69,9 @@ class Player:
     self.money -= ins
     self.insurance = ins
 
-  def play_hand(self, table, hand, split=None): # hand = Hand class, passed in
-    if split:
-      print("Hand " + str(split) + ":")
+  def play_hand(self, table, hand, hand_num=None): # hand = Hand class, passed in
+    if hand_num:
+      print("Hand " + str(hand_num) + ":")
       print(hand)
     while True:
       val = input("Hit (H) or Stand (S)? \n")
@@ -94,11 +95,14 @@ class Player:
     c = self.hand.cards
     self.hand = Hand([c[0]])
     self.split_hand = Hand([c[1]])
+    self.split_hand_bet = self.bet
+    self.money -= self.bet
   
   def reset(self):
     self.hand = None
     self.split_hand = None
     self.bet = 0
+    self.split_hand_bet = 0
     self.insurance = 0
     self.can_double_down = False
     self.can_insurance = False

@@ -88,8 +88,8 @@ def player_turn(table, player):
       player.ask_insurance()
     elif sp == "y":
       player.split_pairs()
-      player.play_hand(table, player.split_hand, split=1)
-      player.play_hand(table, player.hand, split=2)
+      player.play_hand(table, player.split_hand, hand_num=1)
+      player.play_hand(table, player.hand, hand_num=2)
       return
     
     # Regular Round
@@ -98,7 +98,7 @@ def player_turn(table, player):
 def player_bust(player):
   """
     <Purpose>
-      Checks if player hand(s) busted.
+      Checks if all player hand(s) busted.
       
     <Arguments>
       player: instance of Player class
@@ -137,7 +137,8 @@ def dealer_turn(table, dealer, player):
 def evaluate_round(dealer, player):
   """
     <Purpose>
-      Evaluates the round: winner and bets.
+      Evaluates the round given that player has not completely busted.
+      Determines winner and resolves outstanding bets.
 
     <Arguments>
       dealer: instance of Dealer class
@@ -146,7 +147,7 @@ def evaluate_round(dealer, player):
     <Effect>
       Adds/removes money from Player accordingly.
   """
-  
+  # Deal with naturals
   if dealer.hand.natural and player.hand.natural:
     print("Tie, both naturals. Returned $" + str(player.bet))
     player.money += player.bet
@@ -159,34 +160,51 @@ def evaluate_round(dealer, player):
   elif player.hand.natural:
     print("Player natural! Won $" + str(player.bet * 1.5))
     player.money += player.bet + player.bet * 1.5
+  # If a split hand exists
+  elif player.split_hand:
+    if dealer.hand.bust:
+      print("Dealer bust.")
+      # Hand 1
+      if player.hand.bust:
+        print("Hand 1 bust. Lost $" + str(player.bet))
+      else:
+        print("Hand 1 win! Won $" + str(player.bet))
+        player.money += 2 * player.bet
+      # Hand 2
+      if player.split_hand.bust:
+        print("Hand 2 bust. Lost $" + str(player.bet))
+      else:
+        print("Hand 2 win! Won $" + str(player.bet))
+        player.money += 2 * player.split_hand_bet
+    else: # Dealer not busted
+      # Hand 1
+      if player.hand.value > dealer.hand.value:
+        print("Hand 1 wins! Won $" + str(player.bet))
+        player.money += player.bet * 2
+      elif player.hand.value < dealer.hand.value:
+        print("Hand 1 loss. Lost $" + str(player.bet))
+      else:
+        print("Hand 1 tie. Returned $" + str(player.bet))
+        player.money += player.bet
+      # Hand 2
+      if player.split_hand.value > dealer.hand.value:
+        print("Hand 2 wins! Won $" + str(player.bet))
+        player.money += player.split_hand_bet * 2
+      elif player.split_hand.value < dealer.hand.value:
+        print("Hand 2 loss. Lost $" + str(player.bet))
+      else:
+        print("Hand 2 tie. Returned $" + str(player.bet))
+        player.money += player.split_hand_bet
+  # Split hand does not exist
   elif dealer.hand.bust:
     print("Dealer bust, player win! Won $" + str(player.bet))
     player.money += player.bet * 2
-  elif player.split_hand:
-    # hand 1
-    if player.hand.value > dealer.hand.value:
-      print("Hand 1 wins! Won $" + str(player.bet))
-      player.money += player.bet * 2
-    elif player.hand.value < dealer.hand.value:
-      print("Hand 1 loss. Lost $" + str(player.bet))
-    else:
-      print("Hand 1 tie. Returned $" + str(player.bet))
-      player.money += player.bet
-    # hand 2
-    if player.split_hand.value > dealer.hand.value:
-      print("Hand 2 wins! Won $" + str(player.bet))
-      player.money += player.bet * 2
-    elif player.split_hand.value < dealer.hand.value:
-      print("Hand 2 loss. Lost $" + str(player.bet))
-    else:
-      print("Hand 2 tie. Returned $" + str(player.bet))
-      player.money += player.bet
   elif player.hand.value > dealer.hand.value:
     print("Player win! Won $" + str(player.bet))
     player.money += 2 * player.bet
   elif player.hand.value < dealer.hand.value:
     print("Dealer win. Lost $" + str(player.bet))
-  else:
+  else: 
     print("Tie. Returned $" + str(player.bet))
     player.money += player.bet
 
