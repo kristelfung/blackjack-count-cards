@@ -1,3 +1,4 @@
+from tkinter import *
 import random
 from Deck import Deck
 
@@ -44,7 +45,8 @@ class Table:
 
   def check_shoe_size(self):
     if len(self.shoe) < self.shoe_size // 3:
-      print("1/3 cards used up; reshuffling shoe.")
+      reshuffle_msg = Label(text="1/3 cards used up; reshuffling shoe.")
+      reshuffle_msg.pack()
       self.count = 0
       self.shoe = []
       for deck in range(self.num_decks):
@@ -52,6 +54,8 @@ class Table:
         self.shoe += d.cards
       self.shuffle()
 
-  def print_count(self):
-    print("▸ Running Count is " + str(self.count))
-    print("▸ True Count is " + str(self.count / 4))
+  def display_count(self):
+    rc = Label(text="Running Count is " + str(self.count))
+    rc.pack()
+    tc = Label(text="True Count is " + str(self.count / 4))
+    tc.pack()

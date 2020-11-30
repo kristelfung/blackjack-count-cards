@@ -1,3 +1,6 @@
+from tkinter import *
+
+from App import App
 from Dealer import Dealer
 from Player import Player
 from Deck import Deck
@@ -238,13 +241,19 @@ def play_again(dealer, player):
     return False
 
 def main():
+  root = Tk()
+  app = App(root)
+  app.pack()
+  app.mainloop()
+  
+  '''
   # Initialize Table with 4 Decks
   table = Table(num_decks=4)
     
   # Initialize Player and Dealer
   player = Player()
   dealer = Dealer()
-
+  
   # Start the game
   playing = True
   while playing:
@@ -266,6 +275,7 @@ def main():
       print("Bust! Lost $" + str(player.bet))
     # 6. Ask to play again.
     playing = play_again(dealer, player)
+  '''
 
 if __name__ == "__main__":
    main()
