@@ -13,7 +13,7 @@ class App(Frame):
   def initGame(self):
     # Initialize Table with 4 Decks, Player and Dealer
     self.table = Table(num_decks=4)
-    self.player = Player()
+    self.player = Player(self.master)
     self.dealer = Dealer()
     
     self.start_button = Button(self, text="Start (S)", command=self.start)
@@ -28,7 +28,7 @@ class App(Frame):
   def begin_round(self):
     self.table.check_shoe_size()
     self.table.display_count()
-    #self.player.ask_bet()
+    self.player.ask_bet()
     
   def quit(self):
     self.master.destroy()

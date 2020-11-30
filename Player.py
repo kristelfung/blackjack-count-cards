@@ -1,4 +1,5 @@
 from Hand import Hand
+from tkinter import *
 
 class Player:
   """
@@ -16,7 +17,8 @@ class Player:
     can_split_pairs: boolean if player can split pairs, set right after hand
         dealt
   """
-  def __init__(self):
+  def __init__(self, master=None):
+    self.master = master
     self.hand = None
     self.split_hand = None
     self.money = 1000
@@ -35,23 +37,49 @@ class Player:
   def print_hand(self):
     print("Your hand: ")
     print(self.hand)
+  
+  def validate_bet(self, val):
+    if not val:
+        self.bet = 0
+        return True
+    try:
+        self.bet = int(val)
+        if self.bet > self.money:
+          return False
+        return True
+    except ValueError:
+        return False
 
   def ask_bet(self):
-    print("Currently have: $" + str(self.money))
-    valid_bet = False
     bet = None
-    while not valid_bet:
-      bet = input("Place a bet: ")
-      try:
-        bet = float(bet)
-        while bet > self.money:
-          bet = input("Not enough money, place a smaller bet: ")
-          bet = float(bet)
-        valid_bet = True
-      except:
-        print("Please enter a valid number.")
-    self.money = self.money - bet
-    self.bet = bet
+    
+    label_wallet = Label(text="Currently have: $" + str(self.money))
+    label_wallet.pack()
+    bet_prompt = Label(text="Place a bet:")
+    bet_prompt.pack()
+    
+    vcmd = self.master.register(self.validate_bet)
+    entry_bet = Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
+    entry_bet.pack()
+    button_enter = Button(text="Enter (E)", command=self.process_bet)
+    button_enter.pack()
+    
+  def process_bet(self):
+    print("process")
+    
+#    valid_bet = False
+#    while not valid_bet:
+#      try:
+#        bet = float(bet)
+#        while bet > self.money:
+#          bet = input("Not enough money, place a smaller bet: ")
+#          bet = float(bet)
+#        valid_bet = True
+#      except:
+#        print("Please enter a valid number.")
+#
+#    self.money = self.money - bet
+#    self.bet = bet
 
   def ask_insurance(self):
     valid_ins = False
