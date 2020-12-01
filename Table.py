@@ -22,10 +22,10 @@ class Table:
       d = Deck()
       self.shoe += d.cards
     #self.shuffle()
-    self.shoe.append([5, 0, '5♦'])
-    self.shoe.append([5, 0, '5♦'])
-    self.shoe.append([5, 0, '5♦'])
-    self.shoe.append([5, 0, '5♦'])
+#    self.shoe.append([5, 0, '5♦'])
+#    self.shoe.append([5, 0, '5♦'])
+#    self.shoe.append([5, 0, '5♦'])
+#    self.shoe.append([5, 0, '5♦'])
     
     self.label_rc = Label(text="Running Count is " + str(self.count))
     self.label_rc.pack()
@@ -36,7 +36,7 @@ class Table:
     random.shuffle(self.shoe)
 
   def deal(self, dealer, player):
-    dealer.init_cards([self.shoe.pop(), self.shoe.pop()])
+    dealer.init_cards([self.shoe.pop(), self.shoe.pop()], player)
     player.init_cards([self.shoe.pop(), self.shoe.pop()])
 
   def deal_one_card(self, hand):

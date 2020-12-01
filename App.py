@@ -29,31 +29,12 @@ class App(Frame):
     self.table.check_shoe_size()
     self.player.ask_bet()
     self.deal_cards()
-    self.evaluate_deal()
     if not self.player.hand.natural:
       self.player_turn()
     
   def deal_cards(self):
-    """ Deals and displays cards. """
+    """ Deals cards to Dealer and Player. """
     self.table.deal(self.dealer, self.player)
-    self.label_playercards = Label(text=self.player.hand)
-    self.label_playercards.pack()
-    self.label_dealercards = Label(text=self.dealer.hand.cards[0][2] + "[Hidden]")
-    self.label_dealercards.pack()
-    
-  def evaluate_deal(self):
-    """ Checks if Player or Dealer has naturals, and checks if Player
-    can double down / split pairs / insurance. Update count of Table."""
-    if self.player.hand.value == 21:
-      self.player.hand.natural = True
-    if self.dealer.hand.value == 21:
-      self.dealer.hand.natural = True
-    if self.player.hand.value == 9 or self.player.hand.value == 10 or self.player.hand.value == 11:
-      self.player.can_double_down = True
-    if self.player.hand.cards[0][0] == self.player.hand.cards[1][0]:
-      self.player.can_split_pairs = True
-    if self.dealer.hand.cards[0][0] == "A":
-      self.player.can_insurance = True
     self.table.calculate_count(self.player.hand.cards)
     self.table.calculate_count([self.dealer.hand.cards[0]])
     self.table.update_count()
@@ -74,7 +55,7 @@ class App(Frame):
     def split_pairs_wrapper(buttons, table):
       for btn in buttons:
         btn.destroy()
-      self.player.ask_insurance(table)
+      self.player.split_pairs(table)
     
     def play_hand_wrapper(buttons, table, hand):
       for btn in buttons:

@@ -1,3 +1,4 @@
+from tkinter import *
 from Hand import Hand
 
 class Dealer:
@@ -10,8 +11,18 @@ class Dealer:
   def __init__(self):
     self.hand = None
 
-  def init_cards(self, hand):
+  def init_cards(self, hand, player):
+    """ Receives an initial hand frmo the table. Evaluates to see if Dealer
+    has natural, and if Player can buy insurance."""
     self.hand = Hand(hand)
+    
+    if self.hand.value == 21:
+      self.hand.natural = True
+    if self.hand.cards[0][0] == "A":
+      player.can_insurance = True
+    
+    self.label_cards = Label(text=self.hand.cards[0][2] + "[Hidden]")
+    self.label_cards.pack()
 
   def print_one_card(self):
     print("Dealer's hand: ")

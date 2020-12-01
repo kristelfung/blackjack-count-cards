@@ -1,5 +1,5 @@
-from Hand import Hand
 from tkinter import *
+from Hand import Hand
 
 class Player:
   """
@@ -30,9 +30,20 @@ class Player:
     self.can_split_pairs = False
 
   def init_cards(self, hand): # hand is an array of cards
+    """ Receives an initial hand from the table. Evaluates to see if hand is
+    a natural or if we can split pairs / double down. """
     self.hand = Hand(hand)
+    
     if self.hand.value == 21:
       self.hand.natural = True
+    if (self.hand.value == 9 or self.hand.value == 10 or
+        self.hand.value == 11):
+      self.can_double_down = True
+    if self.hand.cards[0][0] == self.hand.cards[1][0]:
+      self.can_split_pairs = True
+    
+    self.label_cards = Label(text=self.hand)
+    self.label_cards.pack()
 
 #  def print_hand(self):
 #    print("Your hand: ")
@@ -75,7 +86,8 @@ class Player:
     self.money -= self.bet
     self.label_wallet.config(text="Currently have: $" + str(self.money))
     self.bet *= 2
-    table.deal_one_card(player.hand)
+    table.deal_one_card(self.hand)
+    
   
   def validate_insurance(self):
     pass
