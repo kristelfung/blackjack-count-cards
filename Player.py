@@ -42,8 +42,8 @@ class Player:
     if self.hand.cards[0][0] == self.hand.cards[1][0]:
       self.can_split_pairs = True
     
-    self.label_cards = Label(text=self.hand)
-    self.label_cards.pack()
+    self.label_hand = Label(text=self.hand)
+    self.label_hand.pack()
 
 #  def print_hand(self):
 #    print("Your hand: ")
@@ -88,7 +88,6 @@ class Player:
     self.bet *= 2
     table.deal_one_card(self.hand)
     
-  
   def validate_insurance(self):
     pass
 
@@ -115,14 +114,22 @@ class Player:
     self.split_hand = Hand([c[1]])
     self.split_hand_bet = self.bet
     self.money -= self.bet
-  
-    self.play_hand(table, self.split_hand, hand_num=1)
-    self.play_hand(table, self.hand, hand_num=2)
+    
+    # Create Label for split hand
+    self.label_split_hand = Label(text=self.split_hand)
+    self.label_split_hand.pack()
+    
+    # Update Label for original hand
+    self.label_hand.config(text=self.hand)
+    
+    self.play_hand(table, self.split_hand, self.label_hand)
+    self.play_hand(table, self.hand, self.label_split_hand)
 
-  def play_hand(self, table, hand, hand_num=None): # hand = Hand class, passed in
-    if hand_num:
-      print("Hand " + str(hand_num) + ":")
-      print(hand)
+  def play_hand(self, table, hand, label=None):
+    """ Takes in Table, Hand, and optional parameter of Label class
+    (label for hand being played) """
+    if not label:
+      label = self.label_hand
     while True:
       val = input("Hit (H) or Stand (S)? \n")
       val = val.lower()

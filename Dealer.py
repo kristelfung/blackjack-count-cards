@@ -24,13 +24,13 @@ class Dealer:
     self.label_cards = Label(text=self.hand.cards[0][2] + "[Hidden]")
     self.label_cards.pack()
 
-  def print_one_card(self):
-    print("Dealer's hand: ")
-    self.hand.print_one()
-
-  def print_hand(self):
-    print("Dealer's hand: ")
-    print(self.hand)
+#  def print_one_card(self):
+#    print("Dealer's hand: ")
+#    self.hand.print_one()
+#
+#  def print_hand(self):
+#    print("Dealer's hand: ")
+#    print(self.hand)
 
   def play(self, table):
     self.print_hand()
