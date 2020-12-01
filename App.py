@@ -11,26 +11,23 @@ class App(Frame):
     self.initGame()
   
   def initGame(self):
-    """ Initializes Table with 4 decks, Player, and Dealer.
-    Create Start and Quit button. """
-    self.table = Table(num_decks=4)
-    self.player = Player(self.master)
-    self.dealer = Dealer()
-    
+    """ Create Start and Quit button. """    
     self.start_button = Button(self, text="Start (S)", command=self.start)
     self.start_button.pack()
     self.quit_button = Button(self, text="Quit (Q)", command=self.quit)
     self.quit_button.pack()
   
   def start(self):
-    """ Begins game. """
+    """ Begins game. Initializes Table with 4 decks, Player, and Dealer. """
     self.start_button.destroy()
+    self.table = Table(num_decks=4)
+    self.player = Player(self.master)
+    self.dealer = Dealer()
     self.play_round()
   
   def play_round(self):
     """ Handles an entire round between Player and Dealer. """
     self.table.check_shoe_size()
-    self.table.display_count()
     self.player.ask_bet()
     self.deal_cards()
     self.evaluate_deal()
