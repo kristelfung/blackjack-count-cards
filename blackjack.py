@@ -258,9 +258,9 @@ def main():
   playing = True
   while playing:
     # 1. Ask for bet amounts and print count
-    table.check_shoe_size()
-    table.print_count()
-    player.ask_bet()
+    table.check_shoe_size() √
+    table.print_count() √
+    player.ask_bet() √
     # 2. Deal hands + print hands + print count
     deal_cards(table, dealer, player)
     # 3. Player move

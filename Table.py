@@ -45,8 +45,7 @@ class Table:
 
   def check_shoe_size(self):
     if len(self.shoe) < self.shoe_size // 3:
-      reshuffle_msg = Label(text="1/3 cards used up; reshuffling shoe.")
-      reshuffle_msg.pack()
+      print("1/3 cards used up; reshuffling shoe.")
       self.count = 0
       self.shoe = []
       for deck in range(self.num_decks):

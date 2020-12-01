@@ -34,9 +34,9 @@ class Player:
     if self.hand.value == 21:
       self.hand.natural = True
 
-  def print_hand(self):
-    print("Your hand: ")
-    print(self.hand)
+#  def print_hand(self):
+#    print("Your hand: ")
+#    print(self.hand)
   
   def validate_bet(self, val):
     if not val:
@@ -51,35 +51,25 @@ class Player:
         return False
 
   def ask_bet(self):
-    bet = None
-    
-    label_wallet = Label(text="Currently have: $" + str(self.money))
-    label_wallet.pack()
-    bet_prompt = Label(text="Place a bet:")
-    bet_prompt.pack()
+    self.label_wallet = Label(text="Currently have: $" + str(self.money))
+    self.label_wallet.pack()
+    self.bet_prompt = Label(text="Place a bet:")
+    self.bet_prompt.pack()
     
     vcmd = self.master.register(self.validate_bet)
-    entry_bet = Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
-    entry_bet.pack()
-    button_enter = Button(text="Enter (E)", command=self.process_bet)
-    button_enter.pack()
+    self.entry_bet = Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
+    self.entry_bet.pack()
+    var = IntVar()
+    self.button_enter = Button(text="Enter (E)", command=lambda: var.set(1))
+    self.button_enter.pack()
     
-  def process_bet(self):
-    print("process")
+    self.button_enter.wait_variable(var)
     
-#    valid_bet = False
-#    while not valid_bet:
-#      try:
-#        bet = float(bet)
-#        while bet > self.money:
-#          bet = input("Not enough money, place a smaller bet: ")
-#          bet = float(bet)
-#        valid_bet = True
-#      except:
-#        print("Please enter a valid number.")
-#
-#    self.money = self.money - bet
-#    self.bet = bet
+    self.money -= self.bet
+    self.label_wallet.config(text="Currently have: $" + str(self.money))
+    self.bet_prompt.destroy()
+    self.entry_bet.destroy()
+    self.button_enter.destroy()
 
   def ask_insurance(self):
     valid_ins = False

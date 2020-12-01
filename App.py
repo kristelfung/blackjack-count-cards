@@ -23,12 +23,25 @@ class App(Frame):
   
   def start(self):
     self.start_button.destroy()
-    self.begin_round()
+    self.play_round()
   
-  def begin_round(self):
+  def play_round(self):
     self.table.check_shoe_size()
     self.table.display_count()
     self.player.ask_bet()
+    self.deal_cards()
+    self.player_turn()
     
+  def deal_cards(self):
+    self.table.deal(self.dealer, self.player)
+    self.label_playercards = Label(text=self.player.hand)
+    self.label_playercards.pack()
+    self.label_dealercards = Label(text=self.dealer.hand.cards[0])
+    self.label_dealercards.pack()
+    
+  
+  def player_turn(self):
+    print("player turn")
+  
   def quit(self):
     self.master.destroy()
