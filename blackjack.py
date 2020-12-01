@@ -23,9 +23,9 @@ def deal_cards(table, dealer, player):
     Prints the count of the table.
   """
   
-  table.deal(dealer, player)
-  dealer.print_one_card()
-  player.print_hand()
+  table.deal(dealer, player) # √
+  dealer.print_one_card() # √
+  player.print_hand() # √
   if player.hand.value == 21:
     player.hand.natural = True
   if dealer.hand.value == 21:

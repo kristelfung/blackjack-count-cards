@@ -54,7 +54,12 @@ class Table:
       self.shuffle()
 
   def display_count(self):
-    rc = Label(text="Running Count is " + str(self.count))
-    rc.pack()
-    tc = Label(text="True Count is " + str(self.count / 4))
-    tc.pack()
+    self.label_rc = Label(text="Running Count is " + str(self.count))
+    self.label_rc.pack()
+    self.label_tc = Label(text="True Count is " + str(self.count / 4))
+    self.label_tc.pack()
+  
+  def update_count(self):
+    """ Updates the running count and true count. """
+    self.label_rc.config(text="Running Count is " + str(self.count))
+    self.label_tc.config(text="True Count is " + str(self.count / 4))
