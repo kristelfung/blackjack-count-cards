@@ -70,8 +70,17 @@ class Player:
     self.bet_prompt.destroy()
     self.entry_bet.destroy()
     self.button_enter.destroy()
+  
+  def double_down(self, table):
+    self.money -= self.bet
+    self.label_wallet.config(text="Currently have: $" + str(self.money))
+    self.bet *= 2
+    table.deal_one_card(player.hand)
+  
+  def validate_insurance(self):
+    pass
 
-  def ask_insurance(self):
+  def ask_insurance(self, table):
     valid_ins = False
     ins = None
     while not valid_ins:
@@ -86,6 +95,17 @@ class Player:
         print("Please enter a valid number.")
     self.money -= ins
     self.insurance = ins
+    self.play_hand(self, table, self.hand)
+  
+  def split_pairs(self, table):
+    c = self.hand.cards
+    self.hand = Hand([c[0]])
+    self.split_hand = Hand([c[1]])
+    self.split_hand_bet = self.bet
+    self.money -= self.bet
+  
+    self.play_hand(table, self.split_hand, hand_num=1)
+    self.play_hand(table, self.hand, hand_num=2)
 
   def play_hand(self, table, hand, hand_num=None): # hand = Hand class, passed in
     if hand_num:
@@ -108,13 +128,6 @@ class Player:
           return
       elif val == "s":
         return
-
-  def split_pairs(self):
-    c = self.hand.cards
-    self.hand = Hand([c[0]])
-    self.split_hand = Hand([c[1]])
-    self.split_hand_bet = self.bet
-    self.money -= self.bet
   
   def reset(self):
     self.hand = None

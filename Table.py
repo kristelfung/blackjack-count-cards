@@ -7,7 +7,7 @@ class Table:
   Table class 
 
   Attributes:
-    shoe: list of cards in the form [['A', 1, 'A♠'], ['A', 2, 'A♥'], ...]
+    shoe: list of cards in the form [['A', 3, 'A♠'], ['A', 2, 'A♥'], ...]
     count: current running count
     shoe_size: default number of cards in the shoe
     num_decks: number of decks in the shoe
@@ -21,7 +21,11 @@ class Table:
     for deck in range(num_decks):
       d = Deck()
       self.shoe += d.cards
-    self.shuffle()
+    #self.shuffle()
+    self.shoe.append([5, 0, '5♦'])
+    self.shoe.append([5, 0, '5♦'])
+    self.shoe.append([5, 0, '5♦'])
+    self.shoe.append([5, 0, '5♦'])
     
     self.label_rc = Label(text="Running Count is " + str(self.count))
     self.label_rc.pack()
