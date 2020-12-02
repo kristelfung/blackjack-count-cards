@@ -1,3 +1,4 @@
+import time
 from tkinter import *
 from Hand import Hand
 
@@ -33,11 +34,11 @@ class Dealer:
 #    print(self.hand)
 
   def play(self, table):
-    self.print_hand()
+    print("dealer playing")
+    self.label_cards.config(text=self.hand)
     while self.hand.value < 17:
-      print("Dealer hits.")
       table.deal_one_card(self.hand)
-      self.print_hand()
+      self.label_cards.config(text=self.hand)
 
   def reset(self):
     self.hand = None

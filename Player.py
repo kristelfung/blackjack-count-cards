@@ -125,28 +125,98 @@ class Player:
     self.play_hand(table, self.split_hand, self.label_hand)
     self.play_hand(table, self.hand, self.label_split_hand)
 
-  def play_hand(self, table, hand, label=None):
+  def play_hand(self, table, hand, label=None): # NEED TO WAIT.
     """ Takes in Table, Hand, and optional parameter of Label class
     (label for hand being played) """
+    
+    stand = IntVar() # To indicate whether player has stood
+    
+    def hit():
+      table.deal_one_card(hand)
+      table.calculate_count([hand.cards[len(hand.cards)-1]])
+      # Update our hand's label of cards AND the table's count
+      label.config(text=hand)
+      table.label_rc.config(text="Running Count is " + str(table.count))
+      table.label_tc.config(text="True Count is " + str(table.count / 4))
+      
+      if hand.bust or hand.blackjack:
+        stand.set(1)
+      
     if not label:
       label = self.label_hand
-    while True:
-      val = input("Hit (H) or Stand (S)? \n")
-      val = val.lower()
-      while val != "h" and val != "s":
-        val = input("Please enter \"H\" for Hit and \"S\" for Stand! \n")
-        val = val.lower()
-      if val == "h":
-        table.deal_one_card(hand)
-        print(hand)
-        table.calculate_count([hand.cards[len(hand.cards)-1]])
-        #table.print_count()
-        if hand.bust:
-          return
-        elif hand.blackjack:
-          return
-      elif val == "s":
-        return
+    # TODO: highlight label (indicate it's the hand's turn)
+    
+    self.button_hit = Button(self.master, text="Hit (H)", command=hit)
+    self.button_hit.pack()
+    self.button_stand = Button(self.master, text="Stand (S)", command=lambda: stand.set(1))
+    self.button_stand.pack()
+    
+    # Wait for stand to be pressed (or forcefully accessed)
+    self.button_stand.wait_variable(stand)
+    
+    self.button_hit.destroy()
+    self.button_stand.destroy()
+  
+  def play(self, table):
+    """ First checks double down / split pairs / insurance if applicable. Plays
+    round accordingly. """
+    
+    action = IntVar() # To indicate whether action has been pressed
+    
+    def double_down_wrapper(buttons, table):
+      for btn in buttons:
+        btn.destroy()
+      self.double_down(table)
+      action.set(1)
+    
+    def insurance_wrapper(buttons, table):
+      for btn in buttons:
+        btn.destroy()
+      self.ask_insurance(table)
+      action.set(1)
+    
+    def split_pairs_wrapper(buttons, table):
+      for btn in buttons:
+        btn.destroy()
+      self.split_pairs(table)
+      action.set(1)
+    
+    def play_hand_wrapper(buttons, table, hand):
+      for btn in buttons:
+        btn.destroy()
+      self.play_hand(table, hand)
+      action.set(1)
+    
+    if self.can_double_down or self.can_insurance or self.can_split_pairs:
+      buttons = []
+      if self.can_double_down:
+        dd_button = Button(self.master, text="Double Down (D)", command= lambda: double_down_wrapper(buttons, table))
+        buttons.append(dd_button)
+        dd_button.pack()
+      if self.can_insurance:
+        button_ins = Button(self.master, text="Insurance (I)", command= lambda: insurance_wrapper(buttons, table))
+        buttons.append(button_ins)
+        button_ins.pack()
+      if self.can_split_pairs:
+        button_sp = Button(self.master, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(buttons, table))
+        buttons.append(button_sp)
+        button_sp.pack()
+      button_normal = Button(self.master, text="Normal Round (N)", command= lambda: play_hand_wrapper(buttons, table, self.hand))
+      buttons.append(button_normal)
+      button_normal.pack()
+      
+      # Wait for user to choose
+      self.master.wait_variable(action)
+    else:
+      self.play_hand(table, self.hand)
+  
+  def is_bust(self):
+    if self.split_hand:
+      if self.split_hand.bust and self.hand.bust:
+        return True
+    elif self.hand.bust:
+      return True
+    return False
   
   def reset(self):
     self.hand = None
