@@ -40,8 +40,8 @@ class Table:
     """ Deals cards to Dealer and Player. """
     dealer.init_cards([self.shoe.pop(), self.shoe.pop()], player)
     player.init_cards([self.shoe.pop(), self.shoe.pop()])
-    self.update_count(self.player.hand.cards)
-    self.update_count([self.dealer.hand.cards[0]])
+    self.update_count(player.hand.cards)
+    self.update_count([dealer.hand.cards[0]])
 
   def deal_one_card(self, hand):
     """ Deals one card (used for Player hit). """

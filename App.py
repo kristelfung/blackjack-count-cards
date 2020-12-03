@@ -28,7 +28,7 @@ class App(Frame):
     """ Handles an entire round between Player and Dealer. """
     self.table.check_shoe_size()
     self.player.ask_bet()
-    self.table.deal_cards(self.player, self.dealer)
+    self.table.deal_cards(self.dealer, self.player)
     if not self.player.hand.natural:
       self.player.play(self.table)
     if not self.player.is_bust():

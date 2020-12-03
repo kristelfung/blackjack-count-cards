@@ -29,6 +29,7 @@ class Dealer:
     self.label_dealer_hits = Label()
     self.label_dealer_hits.pack()
     self.label_cards.config(text=self.hand)
+    table.update_count([self.hand.cards[1]]) # Card overturned
     hits = 0
     while self.hand.value < 17:
       table.deal_one_card(self.hand)
