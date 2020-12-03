@@ -125,7 +125,7 @@ class Player:
     self.play_hand(table, self.split_hand, self.label_hand)
     self.play_hand(table, self.hand, self.label_split_hand)
 
-  def play_hand(self, table, hand, label=None): # NEED TO WAIT.
+  def play_hand(self, table, hand, label_curr_hand=None): # NEED TO WAIT.
     """ Takes in Table, Hand, and optional parameter of Label class
     (label for hand being played) """
     
@@ -135,15 +135,15 @@ class Player:
       table.deal_one_card(hand)
       table.calculate_count([hand.cards[len(hand.cards)-1]])
       # Update our hand's label of cards AND the table's count
-      label.config(text=hand)
+      label_curr_hand.config(text=hand)
       table.label_rc.config(text="Running Count is " + str(table.count))
       table.label_tc.config(text="True Count is " + str(table.count / 4))
       
       if hand.bust or hand.blackjack:
         stand.set(1)
       
-    if not label:
-      label = self.label_hand
+    if not label_curr_hand:
+      label_curr_hand = self.label_hand
     # TODO: highlight label (indicate it's the hand's turn)
     
     self.button_hit = Button(self.master, text="Hit (H)", command=hit)
@@ -151,8 +151,8 @@ class Player:
     self.button_stand = Button(self.master, text="Stand (S)", command=lambda: stand.set(1))
     self.button_stand.pack()
     
-    # Wait for stand to be pressed (or forcefully accessed)
-    self.button_stand.wait_variable(stand)
+    # Wait for stand to be pressed (or forcefully stand due to 21 or bust)
+    self.master.wait_variable(stand)
     
     self.button_hit.destroy()
     self.button_stand.destroy()
