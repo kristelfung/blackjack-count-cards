@@ -153,12 +153,9 @@ class Player:
     def hit():
       """ Player hits and receives one card from Table """
       table.deal_one_card(hand)
-      table.calculate_count([hand.cards[len(hand.cards)-1]])
       # Update our hand's label of cards AND the table's count
       label_curr_hand.config(text=hand)
-      table.label_rc.config(text="Running Count is " + str(table.count))
-      table.label_tc.config(text="True Count is " + str(table.count / 4))
-      
+
       if hand.bust or hand.blackjack:
         stand.set(1)
       

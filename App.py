@@ -28,7 +28,7 @@ class App(Frame):
     """ Handles an entire round between Player and Dealer. """
     self.table.check_shoe_size()
     self.player.ask_bet()
-    self.deal_cards() # TODO: put this in table class
+    self.table.deal_cards(self.player, self.dealer)
     if not self.player.hand.natural:
       self.player.play(self.table)
     if not self.player.is_bust():
@@ -37,13 +37,6 @@ class App(Frame):
     else:
       print("Player lost")
     # Play again?
-    
-  def deal_cards(self):
-    """ Deals cards to Dealer and Player. """
-    self.table.deal(self.dealer, self.player)
-    self.table.calculate_count(self.player.hand.cards)
-    self.table.calculate_count([self.dealer.hand.cards[0]])
-    self.table.update_count()
   
   def quit(self):
     self.master.destroy()

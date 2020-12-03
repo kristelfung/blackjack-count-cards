@@ -33,17 +33,24 @@ class Table:
     self.label_tc.pack()
 
   def shuffle(self):
+    """ Shuffles the shoe. """
     random.shuffle(self.shoe)
 
-  def deal(self, dealer, player):
+  def deal_cards(self, dealer, player):
+    """ Deals cards to Dealer and Player. """
     dealer.init_cards([self.shoe.pop(), self.shoe.pop()], player)
     player.init_cards([self.shoe.pop(), self.shoe.pop()])
+    self.update_count(self.player.hand.cards)
+    self.update_count([self.dealer.hand.cards[0]])
 
   def deal_one_card(self, hand):
+    """ Deals one card (used for Player hit). """
     card_hand = [self.shoe.pop()]
     hand.receive_cards(card_hand)
+    self.update_count(card_hand)
 
-  def calculate_count(self, cards):
+  def update_count(self, cards):
+    """ Updates count of the Table based on cards and updates count Labels. """
     low = [2, 3, 4, 5, 6] # +1
     high = [10, "J", "Q", "K", "A"] # -1
     for card in cards:
@@ -51,8 +58,12 @@ class Table:
         self.count += 1
       elif card[0] in high:
         self.count -= 1
+    self.label_rc.config(text="Running Count is " + str(self.count))
+    self.label_tc.config(text="True Count is " + str(self.count / 4))
 
   def check_shoe_size(self):
+    """ Checks if we need to reshuffle shoe, and reshuffles if 1/3 cards
+    have been used. """
     if len(self.shoe) < self.shoe_size // 3:
       print("1/3 cards used up; reshuffling shoe.")
       self.count = 0
@@ -61,8 +72,4 @@ class Table:
         d = Deck()
         self.shoe += d.cards
       self.shuffle()
-  
-  def update_count(self):
-    """ Updates the running count and true count. """
-    self.label_rc.config(text="Running Count is " + str(self.count))
-    self.label_tc.config(text="True Count is " + str(self.count / 4))
+      self.update_count([])
