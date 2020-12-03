@@ -30,7 +30,7 @@ class Player:
     self.can_split_pairs = False
 
   def init_cards(self, hand): # hand is an array of cards
-    """ Receives an initial hand from the table. Evaluates to see if hand is
+    """ Receives an initial hand from the Table. Evaluates to see if hand is
     a natural or if we can split pairs / double down. """
     self.hand = Hand(hand)
     
@@ -50,18 +50,20 @@ class Player:
 #    print(self.hand)
   
   def validate_bet(self, val):
+    """ Validates and sets self.bet """
     if not val:
-        self.bet = 0
-        return True
+      self.bet = 0
+      return True
     try:
-        self.bet = int(val)
-        if self.bet > self.money:
-          return False
-        return True
-    except ValueError:
+      self.bet = int(val)
+      if self.bet > self.money:
         return False
+      return True
+    except ValueError:
+      return False
 
   def ask_bet(self):
+    """ Prompts Player to ask for a bet. """
     self.label_wallet = Label(text="Currently have: $" + str(self.money))
     self.label_wallet.pack()
     self.bet_prompt = Label(text="Place a bet:")
@@ -78,37 +80,58 @@ class Player:
     
     self.money -= self.bet
     self.label_wallet.config(text="Currently have: $" + str(self.money))
+    self.label_bet = Label(text="Bet: $" + str(self.bet))
     self.bet_prompt.destroy()
     self.entry_bet.destroy()
     self.button_enter.destroy()
   
   def double_down(self, table):
+    """ Double down: Table deals one more card to Player and Player doubles
+    bet. """
     self.money -= self.bet
     self.label_wallet.config(text="Currently have: $" + str(self.money))
     self.bet *= 2
     table.deal_one_card(self.hand)
     
-  def validate_insurance(self):
-    pass
+  def validate_insurance(self, val):
+    """ Validates and sets self.insurance """
+    if not val:
+      self.insurance = 0
+      return True
+    try:
+      self.insurance = int(val)
+      if self.insurance > self.bet / 2:
+        return False
+      return True
+    except ValueError:
+      return False
 
   def ask_insurance(self, table):
-    valid_ins = False
-    ins = None
-    while not valid_ins:
-      ins = input("Buy insurance up to half the original bet: ")
-      try:
-        ins = float(ins)
-        while ins > self.bet / 2:
-          ins = input("Can only place up to half the original: ")
-          ins = float(ins)
-        valid_ins = True
-      except:
-        print("Please enter a valid number.")
-    self.money -= ins
-    self.insurance = ins
-    self.play_hand(self, table, self.hand)
-  
+    """ Asks Player for insurance bet. """
+    self.insurance_prompt = Label(text="Buy insurance up to half the original bet:")
+    self.insurance_prompt.pack()
+    
+    vcmd = self.master.register(self.validate_insurance)
+    self.entry_insurance = Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
+    self.entry_insurance.pack()
+    var = IntVar()
+    self.button_enter = Button(text="Enter (E)", command=lambda: var.set(1))
+    self.button_enter.pack()
+    
+    self.button_enter.wait_variable(var)
+    
+    self.money -= self.insurance
+    self.label_wallet.config(text="Currently have: $" + str(self.money))
+    self.label_insurance = Label(text="Insurance: $" + str(self.insurance))
+    self.label_insurance.pack()
+    self.insurance_prompt.destroy()
+    self.entry_insurance.destroy()
+    self.button_enter.destroy()
+
+    self.play_hand(table, self.hand)
+
   def split_pairs(self, table):
+    """ Splits pairs and plays both hands. """
     c = self.hand.cards
     self.hand = Hand([c[0]])
     self.split_hand = Hand([c[1]])
@@ -132,6 +155,8 @@ class Player:
     stand = IntVar() # To indicate whether player has stood
     
     def hit():
+      """ Player hits and receives one card from Table """
+      print(type(table))
       table.deal_one_card(hand)
       table.calculate_count([hand.cards[len(hand.cards)-1]])
       # Update our hand's label of cards AND the table's count
@@ -164,24 +189,28 @@ class Player:
     action = IntVar() # To indicate whether action has been pressed
     
     def double_down_wrapper(buttons, table):
+      """ Calls double_down, clears buttons and triggers wait variable. """
       for btn in buttons:
         btn.destroy()
       self.double_down(table)
       action.set(1)
     
     def insurance_wrapper(buttons, table):
+      """ Calls ask_insurance, clears buttons and triggers wait variable. """
       for btn in buttons:
         btn.destroy()
       self.ask_insurance(table)
       action.set(1)
     
     def split_pairs_wrapper(buttons, table):
+      """ Calls split_pairs, clears buttons and triggers wait variable. """
       for btn in buttons:
         btn.destroy()
       self.split_pairs(table)
       action.set(1)
     
     def play_hand_wrapper(buttons, table, hand):
+      """ Calls play_hand, clears buttons and triggers wait variable. """
       for btn in buttons:
         btn.destroy()
       self.play_hand(table, hand)
@@ -211,6 +240,7 @@ class Player:
       self.play_hand(table, self.hand)
   
   def is_bust(self):
+    """ Returns whether player has bust, taking into account split hands. """
     if self.split_hand:
       if self.split_hand.bust and self.hand.bust:
         return True
@@ -219,6 +249,7 @@ class Player:
     return False
   
   def reset(self):
+    """ Resets player for the next round. """
     self.hand = None
     self.split_hand = None
     self.bet = 0

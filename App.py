@@ -28,12 +28,12 @@ class App(Frame):
     """ Handles an entire round between Player and Dealer. """
     self.table.check_shoe_size()
     self.player.ask_bet()
-    self.deal_cards()
+    self.deal_cards() # TODO: put this in table class
     if not self.player.hand.natural:
       self.player.play(self.table)
     if not self.player.is_bust():
       self.dealer.play(self.table)
-      # DO COMPARISON
+      # DO COMPARISON - evaluate the round
     else:
       print("Player lost")
     # Play again?
