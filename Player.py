@@ -45,6 +45,14 @@ class Player:
     self.label_hand = Label(text=self.hand)
     self.label_hand.pack()
   
+  def update_balance_labels(self):
+    """ Updates balance, bet (if it exists), and insurance (if it exists). """
+    self.label_wallet.config(text="Currently have: $" + str(self.money))
+    if self.bet:
+      self.label_bet.config(text="Bet: $" + str(self.bet))
+    if self.insurance:
+      self.label_insurance.config(text="Insurance: $" + str(self.insurance))
+  
   def validate_bet(self, val):
     """ Validates and sets self.bet """
     if not val:
@@ -75,8 +83,9 @@ class Player:
     self.button_enter.wait_variable(var)
     
     self.money -= self.bet
-    self.label_wallet.config(text="Currently have: $" + str(self.money))
     self.label_bet = Label(text="Bet: $" + str(self.bet))
+    self.label_bet.pack()
+    self.update_balance_labels()
     self.bet_prompt.destroy()
     self.entry_bet.destroy()
     self.button_enter.destroy()
@@ -85,7 +94,7 @@ class Player:
     """ Double down: Table deals one more card to Player and Player doubles
     bet. """
     self.money -= self.bet
-    self.label_wallet.config(text="Currently have: $" + str(self.money))
+    self.update_balance_labels()
     self.bet *= 2
     table.deal_one_card(self.hand)
     
@@ -117,7 +126,7 @@ class Player:
     self.button_enter.wait_variable(var)
     
     self.money -= self.insurance
-    self.label_wallet.config(text="Currently have: $" + str(self.money))
+    self.update_balance_labels()
     self.label_insurance = Label(text="Insurance: $" + str(self.insurance))
     self.label_insurance.pack()
     self.insurance_prompt.destroy()
