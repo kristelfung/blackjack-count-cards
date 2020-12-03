@@ -241,7 +241,7 @@ class Player:
       self.play_hand(table, self.hand)
   
   def is_bust(self):
-    """ Returns whether player has bust, taking into account split hands. """
+    """ Returns whether Player has bust, taking into account split hands. """
     if self.split_hand:
       if self.split_hand.bust and self.hand.bust:
         return True
@@ -250,7 +250,7 @@ class Player:
     return False
   
   def reset(self):
-    """ Resets player for the next round. """
+    """ Resets Player for the next round. """
     self.hand = None
     self.split_hand = None
     self.bet = 0
