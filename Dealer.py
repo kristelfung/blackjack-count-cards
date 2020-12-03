@@ -1,4 +1,3 @@
-import time
 from tkinter import *
 from Hand import Hand
 
@@ -9,7 +8,8 @@ class Dealer:
   Attributes:
     hand: Hand class representing dealer's hand
   """
-  def __init__(self):
+  def __init__(self, master=None):
+    self.master = master
     self.hand = None
 
   def init_cards(self, hand, player):
@@ -25,20 +25,16 @@ class Dealer:
     self.label_cards = Label(text=self.hand.cards[0][2] + "[Hidden]")
     self.label_cards.pack()
 
-#  def print_one_card(self):
-#    print("Dealer's hand: ")
-#    self.hand.print_one()
-#
-#  def print_hand(self):
-#    print("Dealer's hand: ")
-#    print(self.hand)
-
   def play(self, table):
-    print("dealer playing")
+    self.label_dealer_hits = Label()
+    self.label_dealer_hits.pack()
     self.label_cards.config(text=self.hand)
+    hits = 0
     while self.hand.value < 17:
       table.deal_one_card(self.hand)
       self.label_cards.config(text=self.hand)
+      hits += 1
+    self.label_dealer_hits.config(text="Dealer hits " + str(hits) + " times.")
 
   def reset(self):
     self.hand = None

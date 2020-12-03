@@ -24,16 +24,6 @@ class Hand:
     msg += "(" + str(self.value) + ")"
     return msg
 
-  def print_one(self):
-    face_cards = ["J", "Q", "K"]
-    val = self.cards[0][0]
-    if self.cards[0][0] in face_cards:
-      val = 10
-    elif self.cards[0][0] == "A":
-      val = 11
-    print(self.cards[0][2] + " [Hidden] ("
-          + str(val) + ")")
-
   def calculate_hand(self):
     self.value = 0
     aces = 0

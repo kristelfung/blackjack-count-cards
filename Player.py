@@ -44,10 +44,6 @@ class Player:
     
     self.label_hand = Label(text=self.hand)
     self.label_hand.pack()
-
-#  def print_hand(self):
-#    print("Your hand: ")
-#    print(self.hand)
   
   def validate_bet(self, val):
     """ Validates and sets self.bet """
@@ -156,7 +152,6 @@ class Player:
     
     def hit():
       """ Player hits and receives one card from Table """
-      print(type(table))
       table.deal_one_card(hand)
       table.calculate_count([hand.cards[len(hand.cards)-1]])
       # Update our hand's label of cards AND the table's count

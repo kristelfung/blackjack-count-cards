@@ -21,7 +21,7 @@ class App(Frame):
     self.start_button.destroy()
     self.table = Table(num_decks=4)
     self.player = Player(self.master)
-    self.dealer = Dealer()
+    self.dealer = Dealer(self.master)
     self.play_round()
   
   def play_round(self):
@@ -40,7 +40,6 @@ class App(Frame):
     
   def deal_cards(self):
     """ Deals cards to Dealer and Player. """
-    print("dealing")
     self.table.deal(self.dealer, self.player)
     self.table.calculate_count(self.player.hand.cards)
     self.table.calculate_count([self.dealer.hand.cards[0]])
