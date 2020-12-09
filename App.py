@@ -33,10 +33,84 @@ class App(Frame):
       self.player.play(self.table)
     if not self.player.is_bust():
       self.dealer.play(self.table)
-      # DO COMPARISON - evaluate the round
+      self.evaluate_round()
     else:
       print("Player lost")
     # Play again?
+    # need to destroy labels IF YES TO PLAY AGAIN.
+  
+  def evaluate_round(self):
+    """Evaluates the round given that player has not completely busted.
+    Determines winner and resolves outstanding bets. Displays result. """
+    self.res = Label()
+    self.res.pack()
+    # If naturals exist
+    if self.dealer.hand.natural and self.player.hand.natural:
+      self.res.config(text="Tie, both naturals. Returned $" + str(self.player.bet))
+      self.player.money += self.player.bet
+    elif self.dealer.hand.natural:
+      if self.player.insurance:
+        self.res.config(text="Dealer natural. Insurance returned $" + str(self.player.insurance*2))
+        self.player.money += self.player.insurance * 3
+      else:
+        self.res.config(text="Dealer natural. Lost $" + str(self.player.bet))
+    elif self.player.hand.natural:
+      self.res.config(text="Player natural! Won $" + str(self.player.bet * 1.5))
+      self.player.money += self.player.bet + self.player.bet * 1.5
+    # If split hands exist
+    elif self.player.split_hand:
+      if self.dealer.hand.bust:
+        res_string = "Dealer bust. \n"
+        # Hand 1
+        if self.player.hand.bust:
+          res_string += "Hand 1 bust. Lost $" + str(self.player.bet) + "\n"
+        else:
+          res_string += "Hand 1 win! Won $" + str(self.player.bet) + "\n"
+          self.player.money += 2 * self.player.bet
+        # Hand 2
+        if self.player.split_hand.bust:
+          res_string += "Hand 2 bust. Lost $" + str(self.player.bet)
+        else:
+          res_string += "Hand 2 win! Won $" + str(self.player.bet)
+          self.player.money += 2 * self.player.split_hand_bet
+        self.res.config(text=res_string)
+      else: # Dealer not busted
+        res_string = ""
+        # Hand 1
+        if self.player.hand.value > self.dealer.hand.value:
+          res_string += "Hand 1 wins! Won $" + str(self.player.bet) + "\n"
+          self.player.money += self.player.bet * 2
+        elif self.player.hand.value < self.dealer.hand.value:
+          res_string += "Hand 1 loss. Lost $" + str(self.player.bet) + "\n"
+        else:
+          res_string += "Hand 1 tie. Returned $" + str(self.player.bet) + "\n"
+          self.player.money += self.player.bet
+        # Hand 2
+        if self.player.split_hand.value > self.dealer.hand.value:
+          res_string += "Hand 2 wins! Won $" + str(self.player.bet)
+          self.player.money += self.player.split_hand_bet * 2
+        elif self.player.split_hand.value < self.dealer.hand.value:
+          res_string += "Hand 2 loss. Lost $" + str(self.player.bet)
+        else:
+          res_string += "Hand 2 tie. Returned $" + str(self.player.bet)
+          player.money += player.split_hand_bet
+        self.res.config(text=res_string)
+    # Split hand does not exist
+    elif self.dealer.hand.bust:
+      self.res.config(text="Dealer bust, player win! Won $" + str(self.player.bet))
+      self.player.money += self.player.bet * 2
+    elif self.player.hand.value > self.dealer.hand.value:
+      self.res.config(text="Player win! Won $" + str(self.player.bet))
+      self.player.money += 2 * self.player.bet
+    elif self.player.hand.value < self.dealer.hand.value:
+      self.res.config(text="Dealer win. Lost $" + str(self.player.bet))
+    else:
+      self.res.config(text="Tie. Returned $" + str(self.player.bet))
+      self.player.money += self.player.bet
+    
+    self.player.reset()
+    self.player.update_balance_labels()
+      
   
   def quit(self):
     self.master.destroy()
