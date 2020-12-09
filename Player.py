@@ -94,9 +94,10 @@ class Player:
     """ Double down: Table deals one more card to Player and Player doubles
     bet. """
     self.money -= self.bet
-    self.update_balance_labels()
     self.bet *= 2
+    self.update_balance_labels()
     table.deal_one_card(self.hand)
+    self.label_hand.config(text=self.hand)
     
   def validate_insurance(self, val):
     """ Validates and sets self.insurance """
