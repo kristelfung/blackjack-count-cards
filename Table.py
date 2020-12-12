@@ -21,7 +21,7 @@ class Table:
     for deck in range(num_decks):
       d = Deck()
       self.shoe += d.cards
-    #self.shuffle()
+    self.shuffle()
 #    self.shoe.append([5, 0, '5♦'])
 #    self.shoe.append([5, 0, '5♦'])
 #    self.shoe.append([5, 0, '5♦'])
