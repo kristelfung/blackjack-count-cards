@@ -127,9 +127,9 @@ class Player:
     self.button_enter.wait_variable(var)
     
     self.money -= self.insurance
-    self.update_balance_labels()
     self.label_insurance = Label(text="Insurance: $" + str(self.insurance))
     self.label_insurance.pack()
+    self.update_balance_labels()
     self.insurance_prompt.destroy()
     self.entry_insurance.destroy()
     self.button_enter.destroy()
