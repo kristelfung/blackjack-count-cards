@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 import random
 from Deck import Deck
 
@@ -27,9 +27,9 @@ class Table:
 #    self.shoe.append([5, 0, '5♦'])
 #    self.shoe.append([5, 0, '5♦'])
     
-    self.label_rc = Label(text="Running Count is " + str(self.count))
+    self.label_rc = tk.Label(text="Running Count is " + str(self.count))
     self.label_rc.pack()
-    self.label_tc = Label(text="True Count is " + str(self.count / 4))
+    self.label_tc = tk.Label(text="True Count is " + str(self.count / 4))
     self.label_tc.pack()
 
   def shuffle(self):

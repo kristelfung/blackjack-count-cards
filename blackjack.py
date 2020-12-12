@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 
 from App import App
 from Dealer import Dealer
@@ -7,7 +7,7 @@ from Deck import Deck
 from Table import Table
 
 def main():
-  root = Tk()
+  root = tk.Tk()
   app = App(root)
   app.pack()
   app.mainloop()

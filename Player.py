@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 from Hand import Hand
 
 class Player:
@@ -42,7 +42,7 @@ class Player:
     if self.hand.cards[0][0] == self.hand.cards[1][0]:
       self.can_split_pairs = True
     
-    self.label_hand = Label(text=self.hand)
+    self.label_hand = tk.Label(text=self.hand)
     self.label_hand.pack()
   
   def update_balance_labels(self):
@@ -68,22 +68,22 @@ class Player:
 
   def ask_bet(self):
     """ Prompts Player to ask for a bet. """
-    self.label_wallet = Label(text="Currently have: $" + str(self.money))
+    self.label_wallet = tk.Label(text="Currently have: $" + str(self.money))
     self.label_wallet.pack()
-    self.bet_prompt = Label(text="Place a bet:")
+    self.bet_prompt = tk.Label(text="Place a bet:")
     self.bet_prompt.pack()
     
     vcmd = self.master.register(self.validate_bet)
-    self.entry_bet = Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
+    self.entry_bet = tk.Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
     self.entry_bet.pack()
-    var = IntVar()
-    self.button_enter = Button(text="Enter (E)", command=lambda: var.set(1))
+    var = tk.IntVar()
+    self.button_enter = tk.Button(text="Enter (E)", command=lambda: var.set(1))
     self.button_enter.pack()
     
     self.button_enter.wait_variable(var)
     
     self.money -= self.bet
-    self.label_bet = Label(text="Bet: $" + str(self.bet))
+    self.label_bet = tk.Label(text="Bet: $" + str(self.bet))
     self.label_bet.pack()
     self.update_balance_labels()
     self.bet_prompt.destroy()
@@ -114,20 +114,20 @@ class Player:
 
   def ask_insurance(self, table):
     """ Asks Player for insurance bet. """
-    self.insurance_prompt = Label(text="Buy insurance up to half the original bet:")
+    self.insurance_prompt = tk.Label(text="Buy insurance up to half the original bet:")
     self.insurance_prompt.pack()
     
     vcmd = self.master.register(self.validate_insurance)
-    self.entry_insurance = Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
+    self.entry_insurance = tk.Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
     self.entry_insurance.pack()
-    var = IntVar()
-    self.button_enter = Button(text="Enter (E)", command=lambda: var.set(1))
+    var = tk.IntVar()
+    self.button_enter = tk.Button(text="Enter (E)", command=lambda: var.set(1))
     self.button_enter.pack()
     
     self.button_enter.wait_variable(var)
     
     self.money -= self.insurance
-    self.label_insurance = Label(text="Insurance: $" + str(self.insurance))
+    self.label_insurance = tk.Label(text="Insurance: $" + str(self.insurance))
     self.label_insurance.pack()
     self.update_balance_labels()
     self.insurance_prompt.destroy()
@@ -145,7 +145,7 @@ class Player:
     self.money -= self.bet
     
     # Create Label for split hand
-    self.label_split_hand = Label(text=self.split_hand)
+    self.label_split_hand = tk.Label(text=self.split_hand)
     self.label_split_hand.pack()
     
     # Update Label for original hand
@@ -158,7 +158,7 @@ class Player:
     """ Takes in Table, Hand, and optional parameter of Label class
     (label for hand being played) """
     
-    stand = IntVar() # To indicate whether player has stood
+    stand = tk.IntVar() # To indicate whether player has stood
     
     def hit():
       """ Player hits and receives one card from Table """
@@ -173,9 +173,9 @@ class Player:
       label_curr_hand = self.label_hand
     # TODO: highlight label (indicate it's the hand's turn)
     
-    self.button_hit = Button(self.master, text="Hit (H)", command=hit)
+    self.button_hit = tk.Button(self.master, text="Hit (H)", command=hit)
     self.button_hit.pack()
-    self.button_stand = Button(self.master, text="Stand (S)", command=lambda: stand.set(1))
+    self.button_stand = tk.Button(self.master, text="Stand (S)", command=lambda: stand.set(1))
     self.button_stand.pack()
     
     # Wait for stand to be pressed (or forcefully stand due to 21 or bust)
@@ -188,7 +188,7 @@ class Player:
     """ First checks double down / split pairs / insurance if applicable. Plays
     round accordingly. """
     
-    action = IntVar() # To indicate whether action has been pressed
+    action = tk.IntVar() # To indicate whether action has been pressed
     
     def double_down_wrapper(buttons, table):
       """ Calls double_down, clears buttons and triggers wait variable. """
@@ -221,18 +221,18 @@ class Player:
     if self.can_double_down or self.can_insurance or self.can_split_pairs:
       buttons = []
       if self.can_double_down:
-        dd_button = Button(self.master, text="Double Down (D)", command= lambda: double_down_wrapper(buttons, table))
+        dd_button = tk.Button(self.master, text="Double Down (D)", command= lambda: double_down_wrapper(buttons, table))
         buttons.append(dd_button)
         dd_button.pack()
       if self.can_insurance:
-        button_ins = Button(self.master, text="Insurance (I)", command= lambda: insurance_wrapper(buttons, table))
+        button_ins = tk.Button(self.master, text="Insurance (I)", command= lambda: insurance_wrapper(buttons, table))
         buttons.append(button_ins)
         button_ins.pack()
       if self.can_split_pairs:
-        button_sp = Button(self.master, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(buttons, table))
+        button_sp = tk.Button(self.master, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(buttons, table))
         buttons.append(button_sp)
         button_sp.pack()
-      button_normal = Button(self.master, text="Normal Round (N)", command= lambda: play_hand_wrapper(buttons, table, self.hand))
+      button_normal = tk.Button(self.master, text="Normal Round (N)", command= lambda: play_hand_wrapper(buttons, table, self.hand))
       buttons.append(button_normal)
       button_normal.pack()
       

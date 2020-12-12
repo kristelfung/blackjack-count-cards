@@ -1,19 +1,19 @@
-from tkinter import *
+import tkinter as tk
 from Dealer import Dealer
 from Player import Player
 from Deck import Deck
 from Table import Table
 
-class App(Frame):
+class App(tk.Frame):
   def __init__(self, master=None):
     super(App, self).__init__(master)
     self.initGame()
   
   def initGame(self):
     """ Create Start and Quit button. """
-    self.start_button = Button(self, text="Start (S)", command=self.start)
+    self.start_button = tk.Button(self, text="Start (S)", command=self.start)
     self.start_button.pack()
-    self.quit_button = Button(self, text="Quit (Q)", command=self.quit)
+    self.quit_button = tk.Button(self, text="Quit (Q)", command=self.quit)
     self.quit_button.pack()
   
   def start(self):
@@ -41,7 +41,7 @@ class App(Frame):
   def _evaluate_round(self):
     """Evaluates the round given that player has not completely busted.
     Determines winner and resolves outstanding bets. Displays result. """
-    self.res = Label()
+    self.res = tk.Label()
     self.res.pack()
     # If naturals exist
     if self.dealer.hand.natural and self.player.hand.natural:
@@ -118,5 +118,5 @@ class App(Frame):
       print("Call play round or quit.")
       # need to destroy labels if we call play round.
   
-  def quit(self):
+  def quit(self): # TODO: if wait_variable, doesn't quit the app
     self.master.destroy()

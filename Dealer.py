@@ -1,4 +1,4 @@
-from tkinter import *
+import tkinter as tk
 from Hand import Hand
 
 class Dealer:
@@ -22,11 +22,11 @@ class Dealer:
     if self.hand.cards[0][0] == "A":
       player.can_insurance = True
     
-    self.label_cards = Label(text=self.hand.cards[0][2] + "[Hidden]")
+    self.label_cards = tk.Label(text=self.hand.cards[0][2] + "[Hidden]")
     self.label_cards.pack()
 
   def play(self, table):
-    self.label_dealer_hits = Label()
+    self.label_dealer_hits = tk.Label()
     self.label_dealer_hits.pack()
     self.label_cards.config(text=self.hand)
     table.update_count([self.hand.cards[1]]) # Card overturned
