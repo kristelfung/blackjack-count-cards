@@ -36,7 +36,7 @@ class App(Frame):
       self._evaluate_round()
     else:
       print("Player lost")
-      self._play_again()
+    self._play_again()
   
   def _evaluate_round(self):
     """Evaluates the round given that player has not completely busted.
@@ -110,13 +110,13 @@ class App(Frame):
     self.player.reset()
     self.player.update_balance_labels()
     
-    def _play_again(self):
-      """Asks player if they want to play again."""
-      if self.player.money == 0:
-        print("Out of money!")
-      else:
-        print("Call play round or quit.")
-        # need to destroy labels if we call play round.
+  def _play_again(self):
+    """Asks player if they want to play again."""
+    if self.player.money == 0:
+      print("Out of money!")
+    else:
+      print("Call play round or quit.")
+      # need to destroy labels if we call play round.
   
   def quit(self):
     self.master.destroy()
