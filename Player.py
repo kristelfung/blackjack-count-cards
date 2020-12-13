@@ -6,6 +6,7 @@ class Player:
   Player class
 
   Attributes:
+    player_frame: tk.Frame for player's cards
     hand: Hand class representing player's hand
     split_hand: Hand class if player decides to split
     money: int representing how much money player has remaining

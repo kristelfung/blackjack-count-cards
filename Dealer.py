@@ -6,6 +6,7 @@ class Dealer:
   Dealer class
 
   Attributes:
+    dealer_frame: tk.Frame for dealer's cards
     hand: Hand class representing dealer's hand
   """
   def __init__(self, dealer_frame):
