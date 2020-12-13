@@ -69,7 +69,7 @@ class App(tk.Frame):
     if not self.player.hand.natural:
       self.player.play(self.table, self.action_frame, self.status_frame)
     if not self.player.is_bust():
-      self.dealer.play(self.table)
+      self.dealer.play(self.table, self.action_frame)
       self._evaluate_round()
     else:
       print("Player lost")
@@ -78,7 +78,7 @@ class App(tk.Frame):
   def _evaluate_round(self):
     """Evaluates the round given that player has not completely busted.
     Determines winner and resolves outstanding bets. Displays result. """
-    self.res = tk.Label()
+    self.res = tk.Label(self.action_frame)
     self.res.pack()
     # If naturals exist
     if self.dealer.hand.natural and self.player.hand.natural:

@@ -25,8 +25,8 @@ class Dealer:
     self.label_cards = tk.Label(text=self.hand.cards[0][2] + "[Hidden]")
     self.label_cards.pack()
 
-  def play(self, table):
-    self.label_dealer_hits = tk.Label()
+  def play(self, table, action_frame):
+    self.label_dealer_hits = tk.Label(action_frame)
     self.label_dealer_hits.pack()
     self.label_cards.config(text=self.hand)
     table.update_count([self.hand.cards[1]]) # Card overturned
