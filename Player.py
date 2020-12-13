@@ -18,6 +18,7 @@ class Player:
         dealt
   """
   def __init__(self, player_frame):
+    """Initializes Player and creates "Player" label in player_frame."""
     self.player_frame = player_frame
     self.hand = None
     self.split_hand = None
