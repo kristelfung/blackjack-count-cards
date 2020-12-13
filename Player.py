@@ -159,7 +159,7 @@ class Player:
     self.play_hand(table, self.split_hand, action_frame, self.label_hand)
     self.play_hand(table, self.hand, action_frame, self.label_split_hand)
 
-  def play_hand(self, table, hand, action_frame, label_curr_hand=None): # NEED TO WAIT.
+  def play_hand(self, table, hand, action_frame, label_curr_hand=None):
     """ Takes in Table, Hand, and optional parameter of Label class
     (label for hand being played) """
     
