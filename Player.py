@@ -250,6 +250,7 @@ class Player:
     self.can_split_pairs = False
   
   def clear_frame(self, frame):
+    """Destroys all widgets in a frame."""
     for widget in frame.winfo_children():
       widget.destroy()
         

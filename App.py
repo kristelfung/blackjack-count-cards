@@ -49,9 +49,7 @@ class App(tk.Frame):
   
   def start(self):
     """ Begins game. Initializes Table with 4 decks, Player, and Dealer. """
-    # Clear action frame and put quit button in quit_frame
-    for widget in self.action_frame.winfo_children():
-      widget.destroy()
+    self.clear_frame(self.action_frame)
     
     self.quit_button = tk.Button(self.quit_frame, text="Quit (Q)", command=self.quit)
     self.quit_button.grid(row=0, column=0)
@@ -154,6 +152,11 @@ class App(tk.Frame):
     else:
       print("Call play round or quit.")
       # need to destroy labels if we call play round.
+    
+  def clear_frame(self, frame):
+    """Destroys all widgets in a frame."""
+    for widget in frame.winfo_children():
+      widget.destroy()
   
   def quit(self): # TODO: if wait_variable, doesn't quit the app
     self.master.destroy()
