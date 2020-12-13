@@ -88,10 +88,7 @@ class Player:
     self.label_bet.pack()
     self.update_balance_labels()
     
-    
-    self.bet_prompt.destroy()
-    self.entry_bet.destroy()
-    self.button_enter.destroy()
+    self.clear_frame(action_frame)
   
   def double_down(self, table):
     """ Double down: Table deals one more card to Player and Player doubles
@@ -129,15 +126,12 @@ class Player:
     
     self.button_enter.wait_variable(var)
     
-    print(self.insurance)
     self.money -= self.insurance
     self.label_insurance = tk.Label(status_frame, text="Insurance: $" + str(self.insurance))
     self.label_insurance.pack()
     self.update_balance_labels()
     
-    self.insurance_prompt.destroy()
-    self.entry_insurance.destroy()
-    self.button_enter.destroy()
+    self.clear_frame(action_frame)
 
     self.play_hand(table, self.hand, action_frame)
 
@@ -185,9 +179,7 @@ class Player:
     
     # Wait for stand to be pressed (or forcefully stand due to 21 or bust)
     self.master.wait_variable(stand)
-    
-    self.button_hit.destroy()
-    self.button_stand.destroy()
+    self.clear_frame(action_frame)
   
   def play(self, table, action_frame, status_frame):
     """ First checks double down / split pairs / insurance if applicable. Plays
@@ -195,50 +187,41 @@ class Player:
     
     action = tk.IntVar() # To indicate whether action has been pressed
     
-    def double_down_wrapper(buttons, table):
+    def double_down_wrapper(table):
       """ Calls double_down, clears buttons and triggers wait variable. """
-      for btn in buttons:
-        btn.destroy()
+      self.clear_frame(action_frame)
       self.double_down(table)
       action.set(1)
     
-    def insurance_wrapper(buttons, table, action_frame, status_frame):
+    def insurance_wrapper(table, action_frame, status_frame):
       """ Calls ask_insurance, clears buttons and triggers wait variable. """
-      for btn in buttons:
-        btn.destroy()
+      self.clear_frame(action_frame)
       self.ask_insurance(table, action_frame, status_frame)
       action.set(1)
     
-    def split_pairs_wrapper(buttons, table, action_frame):
+    def split_pairs_wrapper(table, action_frame):
       """ Calls split_pairs, clears buttons and triggers wait variable. """
-      for btn in buttons:
-        btn.destroy()
+      self.clear_frame(action_frame)
       self.split_pairs(table, action_frame)
       action.set(1)
     
-    def play_hand_wrapper(buttons, table, hand, action_frame):
+    def play_hand_wrapper(table, hand, action_frame):
       """ Calls play_hand, clears buttons and triggers wait variable. """
-      for btn in buttons:
-        btn.destroy()
+      self.clear_frame(action_frame)
       self.play_hand(table, hand, action_frame)
       action.set(1)
     
     if self.can_double_down or self.can_insurance or self.can_split_pairs:
-      buttons = []
       if self.can_double_down:
-        dd_button = tk.Button(action_frame, text="Double Down (D)", command= lambda: double_down_wrapper(buttons, table))
-        buttons.append(dd_button)
+        dd_button = tk.Button(action_frame, text="Double Down (D)", command= lambda: double_down_wrapper(table))
         dd_button.pack()
       if self.can_insurance:
-        button_ins = tk.Button(action_frame, text="Insurance (I)", command= lambda: insurance_wrapper(buttons, table, action_frame, status_frame))
-        buttons.append(button_ins)
+        button_ins = tk.Button(action_frame, text="Insurance (I)", command= lambda: insurance_wrapper(table, action_frame, status_frame))
         button_ins.pack()
       if self.can_split_pairs:
-        button_sp = tk.Button(action_frame, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(buttons, table, action_frame))
-        buttons.append(button_sp)
+        button_sp = tk.Button(action_frame, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(table, action_frame))
         button_sp.pack()
-      button_normal = tk.Button(action_frame, text="Normal Round (N)", command= lambda: play_hand_wrapper(buttons, table, self.hand, action_frame))
-      buttons.append(button_normal)
+      button_normal = tk.Button(action_frame, text="Normal Round (N)", command= lambda: play_hand_wrapper(table, self.hand, action_frame))
       button_normal.pack()
       
       # Wait for user to choose
@@ -265,4 +248,8 @@ class Player:
     self.can_double_down = False
     self.can_insurance = False
     self.can_split_pairs = False
+  
+  def clear_frame(self, frame):
+    for widget in frame.winfo_children():
+      widget.destroy()
         
