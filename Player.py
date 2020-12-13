@@ -115,24 +115,26 @@ class Player:
     except ValueError:
       return False
 
-  def ask_insurance(self, table, action_frame):
+  def ask_insurance(self, table, action_frame, status_frame):
     """ Asks Player for insurance bet. """
-    self.insurance_prompt = tk.Label(text="Buy insurance up to half the original bet:")
+    self.insurance_prompt = tk.Label(action_frame, text="Buy insurance up to half the original bet:")
     self.insurance_prompt.pack()
     
     vcmd = self.master.register(self.validate_insurance)
-    self.entry_insurance = tk.Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
+    self.entry_insurance = tk.Entry(action_frame, validate="key", validatecommand=(vcmd, '%P'))
     self.entry_insurance.pack()
     var = tk.IntVar()
-    self.button_enter = tk.Button(text="Enter (E)", command=lambda: var.set(1))
+    self.button_enter = tk.Button(action_frame, text="Enter (E)", command=lambda: var.set(1))
     self.button_enter.pack()
     
     self.button_enter.wait_variable(var)
     
+    print(self.insurance)
     self.money -= self.insurance
-    self.label_insurance = tk.Label(text="Insurance: $" + str(self.insurance))
+    self.label_insurance = tk.Label(status_frame, text="Insurance: $" + str(self.insurance))
     self.label_insurance.pack()
     self.update_balance_labels()
+    
     self.insurance_prompt.destroy()
     self.entry_insurance.destroy()
     self.button_enter.destroy()
@@ -187,7 +189,7 @@ class Player:
     self.button_hit.destroy()
     self.button_stand.destroy()
   
-  def play(self, table, action_frame):
+  def play(self, table, action_frame, status_frame):
     """ First checks double down / split pairs / insurance if applicable. Plays
     round accordingly. """
     
@@ -200,11 +202,11 @@ class Player:
       self.double_down(table)
       action.set(1)
     
-    def insurance_wrapper(buttons, table, action_frame):
+    def insurance_wrapper(buttons, table, action_frame, status_frame):
       """ Calls ask_insurance, clears buttons and triggers wait variable. """
       for btn in buttons:
         btn.destroy()
-      self.ask_insurance(table, action_frame)
+      self.ask_insurance(table, action_frame, status_frame)
       action.set(1)
     
     def split_pairs_wrapper(buttons, table, action_frame):
@@ -228,7 +230,7 @@ class Player:
         buttons.append(dd_button)
         dd_button.pack()
       if self.can_insurance:
-        button_ins = tk.Button(action_frame, text="Insurance (I)", command= lambda: insurance_wrapper(buttons, table, action_frame))
+        button_ins = tk.Button(action_frame, text="Insurance (I)", command= lambda: insurance_wrapper(buttons, table, action_frame, status_frame))
         buttons.append(button_ins)
         button_ins.pack()
       if self.can_split_pairs:
