@@ -9,8 +9,12 @@ class Dealer:
     hand: Hand class representing dealer's hand
   """
   def __init__(self, dealer_frame):
+    """Initializes Dealer and creates "Dealer" label in player_frame."""
     self.dealer_frame = dealer_frame
     self.hand = None
+    
+    dealer_label = tk.Label(self.dealer_frame, text="Dealer")
+    dealer_label.grid(row=0, column=0)
 
   def init_cards(self, hand, player):
     """ Receives an initial hand frmo the table. Evaluates to see if Dealer
@@ -23,7 +27,7 @@ class Dealer:
       player.can_insurance = True
     
     self.label_cards = tk.Label(self.dealer_frame, text=self.hand.cards[0][2] + "[Hidden]")
-    self.label_cards.pack()
+    self.label_cards.grid(row=1, column=0)
 
   def play(self, table, action_frame):
     self.label_dealer_hits = tk.Label(action_frame)
