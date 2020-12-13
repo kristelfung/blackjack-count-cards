@@ -67,7 +67,7 @@ class App(tk.Frame):
     self.player.ask_bet(self.action_frame, self.status_frame)
     self.table.deal_cards(self.dealer, self.player)
     if not self.player.hand.natural:
-      self.player.play(self.table)
+      self.player.play(self.table, self.action_frame)
     if not self.player.is_bust():
       self.dealer.play(self.table)
       self._evaluate_round()

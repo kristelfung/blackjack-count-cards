@@ -115,7 +115,7 @@ class Player:
     except ValueError:
       return False
 
-  def ask_insurance(self, table):
+  def ask_insurance(self, table, action_frame):
     """ Asks Player for insurance bet. """
     self.insurance_prompt = tk.Label(text="Buy insurance up to half the original bet:")
     self.insurance_prompt.pack()
@@ -137,9 +137,9 @@ class Player:
     self.entry_insurance.destroy()
     self.button_enter.destroy()
 
-    self.play_hand(table, self.hand)
+    self.play_hand(table, self.hand, action_frame)
 
-  def split_pairs(self, table):
+  def split_pairs(self, table, action_frame):
     """ Splits pairs and plays both hands. """
     c = self.hand.cards
     self.hand = Hand([c[0]])
@@ -154,10 +154,10 @@ class Player:
     # Update Label for original hand
     self.label_hand.config(text=self.hand)
     
-    self.play_hand(table, self.split_hand, self.label_hand)
-    self.play_hand(table, self.hand, self.label_split_hand)
+    self.play_hand(table, self.split_hand, action_frame, self.label_hand)
+    self.play_hand(table, self.hand, action_frame, self.label_split_hand)
 
-  def play_hand(self, table, hand, label_curr_hand=None): # NEED TO WAIT.
+  def play_hand(self, table, hand, action_frame, label_curr_hand=None): # NEED TO WAIT.
     """ Takes in Table, Hand, and optional parameter of Label class
     (label for hand being played) """
     
@@ -176,9 +176,9 @@ class Player:
       label_curr_hand = self.label_hand
     # TODO: highlight label (indicate it's the hand's turn)
     
-    self.button_hit = tk.Button(self.master, text="Hit (H)", command=hit)
+    self.button_hit = tk.Button(action_frame, text="Hit (H)", command=hit)
     self.button_hit.pack()
-    self.button_stand = tk.Button(self.master, text="Stand (S)", command=lambda: stand.set(1))
+    self.button_stand = tk.Button(action_frame, text="Stand (S)", command=lambda: stand.set(1))
     self.button_stand.pack()
     
     # Wait for stand to be pressed (or forcefully stand due to 21 or bust)
@@ -187,7 +187,7 @@ class Player:
     self.button_hit.destroy()
     self.button_stand.destroy()
   
-  def play(self, table):
+  def play(self, table, action_frame):
     """ First checks double down / split pairs / insurance if applicable. Plays
     round accordingly. """
     
@@ -200,49 +200,49 @@ class Player:
       self.double_down(table)
       action.set(1)
     
-    def insurance_wrapper(buttons, table):
+    def insurance_wrapper(buttons, table, action_frame):
       """ Calls ask_insurance, clears buttons and triggers wait variable. """
       for btn in buttons:
         btn.destroy()
-      self.ask_insurance(table)
+      self.ask_insurance(table, action_frame)
       action.set(1)
     
-    def split_pairs_wrapper(buttons, table):
+    def split_pairs_wrapper(buttons, table, action_frame):
       """ Calls split_pairs, clears buttons and triggers wait variable. """
       for btn in buttons:
         btn.destroy()
-      self.split_pairs(table)
+      self.split_pairs(table, action_frame)
       action.set(1)
     
-    def play_hand_wrapper(buttons, table, hand):
+    def play_hand_wrapper(buttons, table, hand, action_frame):
       """ Calls play_hand, clears buttons and triggers wait variable. """
       for btn in buttons:
         btn.destroy()
-      self.play_hand(table, hand)
+      self.play_hand(table, hand, action_frame)
       action.set(1)
     
     if self.can_double_down or self.can_insurance or self.can_split_pairs:
       buttons = []
       if self.can_double_down:
-        dd_button = tk.Button(self.master, text="Double Down (D)", command= lambda: double_down_wrapper(buttons, table))
+        dd_button = tk.Button(action_frame, text="Double Down (D)", command= lambda: double_down_wrapper(buttons, table))
         buttons.append(dd_button)
         dd_button.pack()
       if self.can_insurance:
-        button_ins = tk.Button(self.master, text="Insurance (I)", command= lambda: insurance_wrapper(buttons, table))
+        button_ins = tk.Button(action_frame, text="Insurance (I)", command= lambda: insurance_wrapper(buttons, table, action_frame))
         buttons.append(button_ins)
         button_ins.pack()
       if self.can_split_pairs:
-        button_sp = tk.Button(self.master, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(buttons, table))
+        button_sp = tk.Button(action_frame, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(buttons, table, action_frame))
         buttons.append(button_sp)
         button_sp.pack()
-      button_normal = tk.Button(self.master, text="Normal Round (N)", command= lambda: play_hand_wrapper(buttons, table, self.hand))
+      button_normal = tk.Button(action_frame, text="Normal Round (N)", command= lambda: play_hand_wrapper(buttons, table, self.hand, action_frame))
       buttons.append(button_normal)
       button_normal.pack()
       
       # Wait for user to choose
       self.master.wait_variable(action)
     else:
-      self.play_hand(table, self.hand)
+      self.play_hand(table, self.hand, action_frame)
   
   def is_bust(self):
     """ Returns whether Player has bust, taking into account split hands. """
