@@ -17,8 +17,8 @@ class Player:
     can_split_pairs: boolean if player can split pairs, set right after hand
         dealt
   """
-  def __init__(self, master=None):
-    self.master = master
+  def __init__(self, player_frame):
+    self.player_frame = player_frame
     self.hand = None
     self.split_hand = None
     self.money = 1000
@@ -42,7 +42,7 @@ class Player:
     if self.hand.cards[0][0] == self.hand.cards[1][0]:
       self.can_split_pairs = True
     
-    self.label_hand = tk.Label(text=self.hand)
+    self.label_hand = tk.Label(self.player_frame, text=self.hand)
     self.label_hand.pack()
   
   def update_balance_labels(self):
@@ -74,7 +74,7 @@ class Player:
     self.bet_prompt = tk.Label(action_frame, text="Place a bet:")
     self.bet_prompt.pack()
     
-    vcmd = self.master.register(self.validate_bet)
+    vcmd = self.player_frame.register(self.validate_bet)
     self.entry_bet = tk.Entry(action_frame, validate="key", validatecommand=(vcmd, '%P'))
     self.entry_bet.pack()
     var = tk.IntVar()
@@ -117,7 +117,7 @@ class Player:
     self.insurance_prompt = tk.Label(action_frame, text="Buy insurance up to half the original bet:")
     self.insurance_prompt.pack()
     
-    vcmd = self.master.register(self.validate_insurance)
+    vcmd = self.player_frame.register(self.validate_insurance)
     self.entry_insurance = tk.Entry(action_frame, validate="key", validatecommand=(vcmd, '%P'))
     self.entry_insurance.pack()
     var = tk.IntVar()
@@ -178,7 +178,7 @@ class Player:
     self.button_stand.pack()
     
     # Wait for stand to be pressed (or forcefully stand due to 21 or bust)
-    self.master.wait_variable(stand)
+    self.player_frame.wait_variable(stand)
     self.clear_frame(action_frame)
   
   def play(self, table, action_frame, status_frame):
@@ -225,7 +225,7 @@ class Player:
       button_normal.pack()
       
       # Wait for user to choose
-      self.master.wait_variable(action)
+      self.player_frame.wait_variable(action)
     else:
       self.play_hand(table, self.hand, action_frame)
   

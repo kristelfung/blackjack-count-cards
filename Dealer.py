@@ -8,8 +8,8 @@ class Dealer:
   Attributes:
     hand: Hand class representing dealer's hand
   """
-  def __init__(self, master=None):
-    self.master = master
+  def __init__(self, dealer_frame):
+    self.dealer_frame = dealer_frame
     self.hand = None
 
   def init_cards(self, hand, player):
@@ -22,7 +22,7 @@ class Dealer:
     if self.hand.cards[0][0] == "A":
       player.can_insurance = True
     
-    self.label_cards = tk.Label(text=self.hand.cards[0][2] + "[Hidden]")
+    self.label_cards = tk.Label(self.dealer_frame, text=self.hand.cards[0][2] + "[Hidden]")
     self.label_cards.pack()
 
   def play(self, table, action_frame):

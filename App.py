@@ -55,8 +55,8 @@ class App(tk.Frame):
     self.quit_button.grid(row=0, column=0)
     
     self.table = Table(4, self.status_frame)
-    self.player = Player(self.master)
-    self.dealer = Dealer(self.master)
+    self.player = Player(self.player_frame)
+    self.dealer = Dealer(self.dealer_frame)
     self.play_round()
   
   def play_round(self):
