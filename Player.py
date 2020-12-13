@@ -28,6 +28,9 @@ class Player:
     self.can_double_down = False
     self.can_insurance = False
     self.can_split_pairs = False
+    
+    player_label = tk.Label(self.player_frame, text="Player")
+    player_label.grid(row=2, column=0)
 
   def init_cards(self, hand): # hand is an array of cards
     """ Receives an initial hand from the Table. Evaluates to see if hand is
@@ -43,7 +46,7 @@ class Player:
       self.can_split_pairs = True
     
     self.label_hand = tk.Label(self.player_frame, text=self.hand)
-    self.label_hand.pack()
+    self.label_hand.grid(row=1, column=0)
   
   def update_balance_labels(self):
     """ Updates balance, bet (if it exists), and insurance (if it exists). """
@@ -144,8 +147,8 @@ class Player:
     self.money -= self.bet
     
     # Create Label for split hand
-    self.label_split_hand = tk.Label(text=self.split_hand)
-    self.label_split_hand.pack()
+    self.label_split_hand = tk.Label(self.player_frame, text=self.split_hand)
+    self.label_split_hand.grid(row=0, column=0)
     
     # Update Label for original hand
     self.label_hand.config(text=self.hand)
