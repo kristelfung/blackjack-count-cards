@@ -47,7 +47,7 @@ class Player:
   
   def update_balance_labels(self):
     """ Updates balance, bet (if it exists), and insurance (if it exists). """
-    self.label_wallet.config(text="Currently have: $" + str(self.money))
+    self.label_wallet.config(text="Balance: $" + str(self.money))
     if self.bet:
       self.label_bet.config(text="Bet: $" + str(self.bet))
     if self.insurance:
@@ -66,26 +66,29 @@ class Player:
     except ValueError:
       return False
 
-  def ask_bet(self):
+  def ask_bet(self, action_frame, status_frame):
     """ Prompts Player to ask for a bet. """
-    self.label_wallet = tk.Label(text="Currently have: $" + str(self.money))
+    self.label_wallet = tk.Label(status_frame, text="Balance: $" + str(self.money))
     self.label_wallet.pack()
-    self.bet_prompt = tk.Label(text="Place a bet:")
+    
+    self.bet_prompt = tk.Label(action_frame, text="Place a bet:")
     self.bet_prompt.pack()
     
     vcmd = self.master.register(self.validate_bet)
-    self.entry_bet = tk.Entry(self.master, validate="key", validatecommand=(vcmd, '%P'))
+    self.entry_bet = tk.Entry(action_frame, validate="key", validatecommand=(vcmd, '%P'))
     self.entry_bet.pack()
     var = tk.IntVar()
-    self.button_enter = tk.Button(text="Enter (E)", command=lambda: var.set(1))
+    self.button_enter = tk.Button(action_frame, text="Enter (↵)", command=lambda: var.set(1))
     self.button_enter.pack()
     
     self.button_enter.wait_variable(var)
     
     self.money -= self.bet
-    self.label_bet = tk.Label(text="Bet: $" + str(self.bet))
+    self.label_bet = tk.Label(status_frame, text="Bet: $" + str(self.bet))
     self.label_bet.pack()
     self.update_balance_labels()
+    
+    
     self.bet_prompt.destroy()
     self.entry_bet.destroy()
     self.button_enter.destroy()

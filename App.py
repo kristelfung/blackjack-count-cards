@@ -12,12 +12,12 @@ class App(tk.Frame):
   def create_window(self):
     """ Create grid and start/quit buttons. """
     # Add padding to the entire window
-    self.master['padx'] = 5
-    self.master['pady'] = 5
+    self.master['padx'] = 10
+    self.master['pady'] = 10
     
-    # Create [0, 0] Count Frame
-    self.count_frame = tk.Frame(self, width=200, height=120)
-    self.count_frame.grid(row=0, column=0, padx=5, pady=5)
+    # Create [0, 0] Status Frame (Count and $$)
+    self.status_frame = tk.Frame(self, width=200, height=120)
+    self.status_frame.grid(row=0, column=0, padx=5, pady=5)
     
     # Create [0, 1] Dealer Frame
     self.dealer_frame = tk.Frame(self, width=200, height=120)
@@ -27,9 +27,9 @@ class App(tk.Frame):
     self.quit_frame = tk.Frame(self, width=200, height=120)
     self.quit_frame.grid(row=0, column=2, padx=5, pady=5, sticky=tk.N + tk.E)
     
-    # Create [1, 0] Money Frame
-    self.money_frame = tk.Frame(self, width=200, height=120)
-    self.money_frame.grid(row=1, column=0, padx=5, pady=5)
+    # Create [0, 1] Blank Frame to complete grid
+    self.blank_frame = tk.Frame(self, width=200, height=120)
+    self.blank_frame.grid(row=1, column=0, padx=5, pady=5)
     
     # Create [1, 1] Action Frame
     self.action_frame = tk.Frame(self, width=200, height=120)
@@ -56,7 +56,7 @@ class App(tk.Frame):
     self.quit_button = tk.Button(self.quit_frame, text="Quit (Q)", command=self.quit)
     self.quit_button.grid(row=0, column=0)
     
-    self.table = Table(num_decks=4)
+    self.table = Table(4, self.status_frame)
     self.player = Player(self.master)
     self.dealer = Dealer(self.master)
     self.play_round()
@@ -64,7 +64,7 @@ class App(tk.Frame):
   def play_round(self):
     """ Handles an entire round between Player and Dealer. """
     self.table.check_shoe_size()
-    self.player.ask_bet()
+    self.player.ask_bet(self.action_frame, self.status_frame)
     self.table.deal_cards(self.dealer, self.player)
     if not self.player.hand.natural:
       self.player.play(self.table)

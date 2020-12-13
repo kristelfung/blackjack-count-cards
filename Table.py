@@ -13,7 +13,7 @@ class Table:
     num_decks: number of decks in the shoe
   """
 
-  def __init__(self, num_decks):
+  def __init__(self, num_decks, status_frame):
     self.shoe = []
     self.count = 0
     self.shoe_size = num_decks * 52
@@ -27,9 +27,12 @@ class Table:
 #    self.shoe.append([5, 0, '5♦'])
 #    self.shoe.append([5, 0, '5♦'])
     
-    self.label_rc = tk.Label(text="Running Count is " + str(self.count))
+    self.create_window(status_frame)
+  
+  def create_window(self, status_frame):
+    self.label_rc = tk.Label(status_frame, text="Running Count is " + str(self.count))
     self.label_rc.pack()
-    self.label_tc = tk.Label(text="True Count is " + str(self.count / 4))
+    self.label_tc = tk.Label(status_frame, text="True Count is " + str(self.count / 4))
     self.label_tc.pack()
 
   def shuffle(self):
