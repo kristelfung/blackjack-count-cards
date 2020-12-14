@@ -1,4 +1,5 @@
 import tkinter as tk
+import os
 from Dealer import Dealer
 from Player import Player
 from Deck import Deck
@@ -204,5 +205,5 @@ class App(tk.Frame):
     for widget in frame.winfo_children():
       widget.destroy()
   
-  def quit(self): # TODO: if wait_variable, doesn't quit the app
-    self.master.destroy()
+  def quit(self):
+    os._exit(1) # Dirty way to terminate despite wait_variables
