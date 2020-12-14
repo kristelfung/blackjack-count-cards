@@ -15,8 +15,15 @@ class Dealer:
     self.action_frame = action_frame
     self.hand = None
     
+    self.create_frame()
+  
+  def create_frame(self):
+    """Initialize Dealer Frame for cards."""
+    self.dealer_frame.grid_columnconfigure((0), weight=1)
+    self.dealer_frame.grid_rowconfigure((0, 1, 2), weight=1)
+    
     dealer_label = tk.Label(self.dealer_frame, text="Dealer")
-    dealer_label.grid(row=0, column=0, sticky=tk.N)
+    dealer_label.grid(row=0, column=0, sticky="n")
 
   def init_cards(self, hand, player):
     """ Receives an initial hand frmo the table. Evaluates to see if Dealer
@@ -29,7 +36,7 @@ class Dealer:
       player.can_insurance = True
     
     self.label_cards = tk.Label(self.dealer_frame, text=self.hand.cards[0][2] + "[Hidden]")
-    self.label_cards.grid(row=1, column=0)
+    self.label_cards.grid(row=1, column=0, rowspan=2, sticky="n")
 
   def play(self, table):
     self.label_dealer_hits = tk.Label(self.action_frame)

@@ -37,8 +37,11 @@ class Player:
   
   def create_frame(self):
     """Initialize Player Frame for cards, and Status Frame for bets and balances."""
+    self.player_frame.grid_columnconfigure((0), weight=1)
+    self.player_frame.grid_rowconfigure((0, 1, 2), weight=1)
+    
     player_label = tk.Label(self.player_frame, text="Player")
-    player_label.grid(row=2, column=0)
+    player_label.grid(row=2, column=0, sticky="s")
     
     # Status Frame: Rows 2, 3, 4 for Balance, Bet, Insurance
     self.status_frame.grid_columnconfigure((0), weight=1)
@@ -67,7 +70,7 @@ class Player:
       self.can_split_pairs = True
     
     self.label_hand = tk.Label(self.player_frame, text=self.hand)
-    self.label_hand.grid(row=1, column=0)
+    self.label_hand.grid(row=1, column=0, sticky="s")
   
   def update_balance_labels(self):
     """ Updates balance, bet (if it exists), and insurance (if it exists). """
@@ -172,7 +175,7 @@ class Player:
     
     # Create Label for split hand
     self.label_split_hand = tk.Label(self.player_frame, text=self.split_hand)
-    self.label_split_hand.grid(row=0, column=0)
+    self.label_split_hand.grid(row=0, column=0, sticky="s")
     
     # Update Label for original hand
     self.label_hand.config(text=self.hand)

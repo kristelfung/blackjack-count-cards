@@ -12,6 +12,8 @@ class App(tk.Frame):
   
   def create_window(self):
     """Create a 3x3 grid for the game."""
+    self.master['padx'] = 5
+    self.master['pady'] = 5
     
     # [0, 0] Status Frame (Count and $$)
     self.status_frame = tk.Frame(self, width=250, height=160, bg="orange")
@@ -60,8 +62,10 @@ class App(tk.Frame):
     self.action_frame.grid_columnconfigure((0, 1), weight=0)
     self.action_frame.grid_rowconfigure((0), weight=0)
     
+    self.quit_frame.grid_columnconfigure((0), weight=1)
+    self.quit_frame.grid_rowconfigure((0), weight=1)
     self.quit_button = tk.Button(self.quit_frame, text="Quit (Q)", command=self.quit)
-    self.quit_button.grid(row=0, column=0, sticky="ne")
+    self.quit_button.grid(row=0, column=0, ipadx=5, ipady=5, sticky="ne")
     
     self.table = Table(4, self.status_frame)
     self.player = Player(self.player_frame, self.status_frame, self.action_frame)
