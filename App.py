@@ -148,7 +148,7 @@ class App(tk.Frame):
           res_string += "Hand 2 loss. Lost $" + str(self.player.bet)
         else:
           res_string += "Hand 2 tie. Returned $" + str(self.player.bet)
-          self.player.money += player.split_hand_bet
+          self.player.money += self.player.split_hand_bet
         self.res.config(text=res_string)
     # Split hand does not exist
     elif self.dealer.hand.bust:
