@@ -71,6 +71,8 @@ class Player:
     
     self.label_hand = tk.Label(self.player_frame, text=self.hand)
     self.label_hand.grid(row=1, column=0, sticky="s")
+    self.label_split_hand = tk.Label(self.player_frame)
+    self.label_split_hand.grid(row=0, column=0, sticky="s")
   
   def update_balance_labels(self):
     """ Updates balance, bet (if it exists), and insurance (if it exists). """
@@ -173,9 +175,8 @@ class Player:
     self.split_hand_bet = self.bet
     self.money -= self.bet
     
-    # Create Label for split hand
-    self.label_split_hand = tk.Label(self.player_frame, text=self.split_hand)
-    self.label_split_hand.grid(row=0, column=0, sticky="s")
+    # Update text for split hand
+    self.label_split_hand.config(text=self.split_hand)
     
     # Update Label for original hand
     self.label_hand.config(text=self.hand)
@@ -288,8 +289,7 @@ class Player:
     self.can_split_pairs = False
     
     self.label_hand.destroy()
-    if self.label_split_hand:
-      self.label_split_hand.destroy()
+    self.label_split_hand.destroy()
   
   def clear_frame(self, frame):
     """Destroys all widgets in a frame."""
