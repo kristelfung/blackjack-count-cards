@@ -9,6 +9,7 @@ from Table import Table
 def main():
   root = tk.Tk()
   root.resizable(False, False)
+  root.title("Blackjack - Counting Card Simulator")
   app = App(root)
   app.pack()
   app.mainloop()
