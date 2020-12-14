@@ -105,7 +105,7 @@ class Player:
     self.entry_bet.grid(row=1, column=0, ipadx=2, ipady=2, sticky="n")
     var = tk.IntVar()
     self.button_enter = tk.Button(self.action_frame, text="Enter (↵)", command=lambda: var.set(1))
-    self.button_enter.grid(row=1, column=1, pady=0, ipadx=5, ipady=5, sticky="n")
+    self.button_enter.grid(row=1, column=1, pady=0, ipadx=10, ipady=5, sticky="n")
     
     self.button_enter.wait_variable(var)
     
@@ -152,7 +152,7 @@ class Player:
     self.entry_insurance.grid(row=1, column=0, ipadx=2, ipady=2, sticky="n")
     var = tk.IntVar()
     self.button_enter = tk.Button(self.action_frame, text="Enter (↵)", command=lambda: var.set(1))
-    self.button_enter.grid(row=1, column=1, pady=0, ipadx=5, ipady=5, sticky="n")
+    self.button_enter.grid(row=1, column=1, pady=0, ipadx=10, ipady=5, sticky="n")
     
     self.button_enter.wait_variable(var)
     
