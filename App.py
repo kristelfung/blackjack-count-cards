@@ -184,7 +184,7 @@ class App(tk.Frame):
       self.res.grid(row=2, column=0, sticky="n")
     else:
       self.play_button = tk.Button(self.action_frame, text="Play Again (P)", command=lambda: click.set(1))
-      self.play_button.grid(row=2, column=0, sticky="n")
+      self.play_button.grid(row=2, column=0, ipadx=5, ipady=5, sticky="n")
       
       self.master.wait_variable(click)
       
