@@ -290,6 +290,11 @@ class Player:
     
     self.label_hand.destroy()
     self.label_split_hand.destroy()
+    
+    self.label_bet.config(text="")
+    self.label_insurance.config(text="")
+    
+    self.update_balance_labels()
   
   def clear_frame(self, frame):
     """Destroys all widgets in a frame."""
