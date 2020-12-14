@@ -9,13 +9,14 @@ class Dealer:
     dealer_frame: tk.Frame for dealer's cards
     hand: Hand class representing dealer's hand
   """
-  def __init__(self, dealer_frame):
+  def __init__(self, dealer_frame, action_frame):
     """Initializes Dealer and creates "Dealer" label in player_frame."""
     self.dealer_frame = dealer_frame
+    self.action_frame = action_frame
     self.hand = None
     
     dealer_label = tk.Label(self.dealer_frame, text="Dealer")
-    dealer_label.grid(row=0, column=0)
+    dealer_label.grid(row=0, column=0, sticky=tk.N)
 
   def init_cards(self, hand, player):
     """ Receives an initial hand frmo the table. Evaluates to see if Dealer
@@ -30,9 +31,9 @@ class Dealer:
     self.label_cards = tk.Label(self.dealer_frame, text=self.hand.cards[0][2] + "[Hidden]")
     self.label_cards.grid(row=1, column=0)
 
-  def play(self, table, action_frame):
-    self.label_dealer_hits = tk.Label(action_frame)
-    self.label_dealer_hits.pack()
+  def play(self, table):
+    self.label_dealer_hits = tk.Label(self.action_frame)
+    self.label_dealer_hits.grid(row=0, column=0, sticky="s")
     self.label_cards.config(text=self.hand)
     table.update_count([self.hand.cards[1]]) # Card overturned
     hits = 0

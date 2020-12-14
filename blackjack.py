@@ -8,6 +8,7 @@ from Table import Table
 
 def main():
   root = tk.Tk()
+  root.resizable(False, False)
   app = App(root)
   app.pack()
   app.mainloop()

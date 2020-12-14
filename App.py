@@ -8,66 +8,75 @@ class App(tk.Frame):
   def __init__(self, master=None):
     super(App, self).__init__(master)
     self.create_window()
+    self.init_start_buttons()
   
   def create_window(self):
-    """ Create grid and start/quit buttons. """
-    # Add padding to the entire window
-    self.master['padx'] = 10
-    self.master['pady'] = 10
+    """Create a 3x3 grid for the game."""
     
-    # Create [0, 0] Status Frame (Count and $$)
-    self.status_frame = tk.Frame(self, width=200, height=120)
-    self.status_frame.grid(row=0, column=0, padx=5, pady=5)
+    # [0, 0] Status Frame (Count and $$)
+    self.status_frame = tk.Frame(self, width=250, height=160, bg="orange")
+    self.status_frame.grid(row=0, column=0, rowspan=2, sticky="n")
+    self.status_frame.grid_propagate(False)
     
-    # Create [0, 1] Dealer Frame
-    self.dealer_frame = tk.Frame(self, width=200, height=120)
-    self.dealer_frame.grid(row=0, column=1, padx=5, pady=5)
+    # [0, 1] Dealer Frame
+    self.dealer_frame = tk.Frame(self, width=250, height=140, bg="red")
+    self.dealer_frame.grid(row=0, column=1)
+    self.dealer_frame.grid_propagate(False)
     
-    # Create [0, 2] Quit Frame
-    self.quit_frame = tk.Frame(self, width=200, height=120)
-    self.quit_frame.grid(row=0, column=2, padx=5, pady=5, sticky=tk.N + tk.E)
+    # [0, 2] Quit Frame
+    self.quit_frame = tk.Frame(self, width=250, height=140, bg="blue")
+    self.quit_frame.grid(row=0, column=2)
+    self.quit_frame.grid_propagate(False)
     
-    # Create [0, 1] Blank Frame to complete grid
-    self.blank_frame = tk.Frame(self, width=200, height=120)
-    self.blank_frame.grid(row=1, column=0, padx=5, pady=5)
+    # [1, 1] Action Frame
+    self.action_frame = tk.Frame(self, width=250, height=140, bg="grey")
+    self.action_frame.grid(row=1, column=1, sticky="nsew")
+    self.action_frame.grid_propagate(False)
     
-    # Create [1, 1] Action Frame
-    self.action_frame = tk.Frame(self, width=200, height=120)
+    # [1, 2] Table Frame
+    self.table_frame = tk.Frame(self, width=250, height=140, bg="green")
+    self.table_frame.grid(row=1, column=2)
+    self.table_frame.grid_propagate(False)
+    
+    # [2, 1] Player Frame
+    self.player_frame = tk.Frame(self, width=250, height=140, bg="purple")
+    self.player_frame.grid(row=2, column=1)
+    self.player_frame.grid_propagate(False)
+
+  def init_start_buttons(self):
+    """Initializes Start and Quit button, assigns each weight of 1."""
+    self.action_frame.grid_columnconfigure((0, 1), weight=1)
+    self.action_frame.grid_rowconfigure((0), weight=1)
+    
     self.start_button = tk.Button(self.action_frame, text="Start (S)", command=self.start)
-    self.start_button.grid(row=0, column=0)
+    self.start_button.grid(row=0, column=0, ipadx=10, ipady=10)
+    
     self.quit_button = tk.Button(self.action_frame, text="Quit (Q)", command=self.quit)
-    self.quit_button.grid(row=1, column=0)
-    self.action_frame.grid(row=1, column=1, padx=5, pady=5)
-    
-    # Create [1, 2] Table Frame
-    self.table_frame = tk.Frame(self, width=200, height=120)
-    self.table_frame.grid(row=1, column=2, padx=5, pady=5)
-    
-    # Create a [2, 1] Player Frame
-    self.player_frame = tk.Frame(self, width=200, height=120)
-    self.player_frame.grid(row=2, column=1, padx=5, pady=5)
+    self.quit_button.grid(row=0, column=1, ipadx=10, ipady=10)
   
   def start(self):
     """ Begins game. Initializes Table with 4 decks, Player, and Dealer. """
     self.clear_frame(self.action_frame)
+    self.action_frame.grid_columnconfigure((0, 1), weight=0)
+    self.action_frame.grid_rowconfigure((0), weight=0)
     
     self.quit_button = tk.Button(self.quit_frame, text="Quit (Q)", command=self.quit)
-    self.quit_button.grid(row=0, column=0)
+    self.quit_button.grid(row=0, column=0, sticky="ne")
     
     self.table = Table(4, self.status_frame)
-    self.player = Player(self.player_frame)
-    self.dealer = Dealer(self.dealer_frame)
+    self.player = Player(self.player_frame, self.status_frame, self.action_frame)
+    self.dealer = Dealer(self.dealer_frame, self.action_frame)
     self.play_round()
   
   def play_round(self):
     """ Handles an entire round between Player and Dealer. """
     self.table.check_shoe_size()
-    self.player.ask_bet(self.action_frame, self.status_frame)
+    self.player.ask_bet()
     self.table.deal_cards(self.dealer, self.player)
     if not self.player.hand.natural:
-      self.player.play(self.table, self.action_frame, self.status_frame)
+      self.player.play(self.table)
     if not self.player.is_bust():
-      self.dealer.play(self.table, self.action_frame)
+      self.dealer.play(self.table)
       self._evaluate_round()
     else:
       print("Player lost")
@@ -77,7 +86,10 @@ class App(tk.Frame):
     """Evaluates the round given that player has not completely busted.
     Determines winner and resolves outstanding bets. Displays result. """
     self.res = tk.Label(self.action_frame)
-    self.res.pack()
+    self.res.grid(row=1, column=0, sticky="n")
+    self.action_frame.grid_columnconfigure((0), weight=1)
+    self.action_frame.grid_rowconfigure((0, 1), weight=1)
+    
     # If naturals exist
     if self.dealer.hand.natural and self.player.hand.natural:
       self.res.config(text="Tie, both naturals. Returned $" + str(self.player.bet))

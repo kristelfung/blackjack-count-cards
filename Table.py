@@ -14,6 +14,7 @@ class Table:
   """
 
   def __init__(self, num_decks, status_frame):
+    self.status_frame = status_frame
     self.shoe = []
     self.count = 0
     self.shoe_size = num_decks * 52
@@ -22,18 +23,16 @@ class Table:
       d = Deck()
       self.shoe += d.cards
     self.shuffle()
-#    self.shoe.append([5, 0, '5♦'])
-#    self.shoe.append([5, 0, '5♦'])
-#    self.shoe.append([5, 0, '5♦'])
-#    self.shoe.append([5, 0, '5♦'])
     
     self.create_window(status_frame)
   
   def create_window(self, status_frame):
+    self.status_frame.grid_columnconfigure((0), weight=1)
+    self.status_frame.grid_rowconfigure((0, 1), weight=1)
     self.label_rc = tk.Label(status_frame, text="Running Count is " + str(self.count))
-    self.label_rc.pack()
+    self.label_rc.grid(row=0, column=0)
     self.label_tc = tk.Label(status_frame, text="True Count is " + str(self.count / 4))
-    self.label_tc.pack()
+    self.label_tc.grid(row=1, column=0)
 
   def shuffle(self):
     """ Shuffles the shoe. """
