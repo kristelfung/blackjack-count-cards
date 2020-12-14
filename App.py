@@ -83,7 +83,7 @@ class App(tk.Frame):
       self.dealer.play(self.table)
       self._evaluate_round()
     else:
-      print("Player lost")
+      self._player_bust_msg()
     self._play_again()
   
   def _evaluate_round(self):
@@ -127,7 +127,9 @@ class App(tk.Frame):
       else: # Dealer not busted
         res_string = ""
         # Hand 1
-        if self.player.hand.value > self.dealer.hand.value:
+        if self.player.hand.bust:
+          res_string += "Hand 1 bust! Lost $" + str(self.player.bet) + "\n"
+        elif self.player.hand.value > self.dealer.hand.value:
           res_string += "Hand 1 wins! Won $" + str(self.player.bet) + "\n"
           self.player.money += self.player.bet * 2
         elif self.player.hand.value < self.dealer.hand.value:
@@ -136,14 +138,16 @@ class App(tk.Frame):
           res_string += "Hand 1 tie. Returned $" + str(self.player.bet) + "\n"
           self.player.money += self.player.bet
         # Hand 2
-        if self.player.split_hand.value > self.dealer.hand.value:
+        if self.player.split_hand.bust:
+          res_string += "Hand 2 bust! Lost $" + str(self.player.bet)
+        elif self.player.split_hand.value > self.dealer.hand.value:
           res_string += "Hand 2 wins! Won $" + str(self.player.bet)
           self.player.money += self.player.split_hand_bet * 2
         elif self.player.split_hand.value < self.dealer.hand.value:
           res_string += "Hand 2 loss. Lost $" + str(self.player.bet)
         else:
           res_string += "Hand 2 tie. Returned $" + str(self.player.bet)
-          player.money += player.split_hand_bet
+          self.player.money += player.split_hand_bet
         self.res.config(text=res_string)
     # Split hand does not exist
     elif self.dealer.hand.bust:
@@ -158,16 +162,42 @@ class App(tk.Frame):
       self.res.config(text="Tie. Returned $" + str(self.player.bet))
       self.player.money += self.player.bet
     
-    self.player.reset()
     self.player.update_balance_labels()
+  
+  def _player_bust_msg(self):
+    """Displays message saying player busted."""
+    self.res = tk.Label(self.action_frame, text="Player busted!")
+    self.res.grid(row=0, column=0)
+    self.action_frame.grid_columnconfigure((0), weight=1)
+    self.action_frame.grid_rowconfigure((0, 1), weight=1)
     
   def _play_again(self):
     """Asks player if they want to play again."""
+    self.action_frame.grid_columnconfigure((0), weight=1)
+    self.action_frame.grid_rowconfigure((2), weight=1)
+    
+    click = tk.IntVar()
+    
     if self.player.money == 0:
-      print("Out of money!")
+      self.res = tk.Label(self.action_frame, text="Out of money!")
+      self.res.grid(row=2, column=0, sticky="n")
     else:
-      print("Call play round or quit.")
-      # need to destroy labels if we call play round.
+      self.play_button = tk.Button(self.action_frame, text="Play Again (P)", command=lambda: click.set(1))
+      self.play_button.grid(row=2, column=0, sticky="n")
+      
+      self.master.wait_variable(click)
+      
+      self.reset_all()
+      self.play_round()
+  
+  def reset_all(self):
+    self.clear_frame(self.action_frame)
+    
+    self.player.reset()
+    self.dealer.reset()
+    
+    self.action_frame.grid_columnconfigure((0), weight=0)
+    self.action_frame.grid_rowconfigure((0, 1, 2), weight=0)
     
   def clear_frame(self, frame):
     """Destroys all widgets in a frame."""

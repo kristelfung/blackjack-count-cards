@@ -52,3 +52,4 @@ class Dealer:
 
   def reset(self):
     self.hand = None
+    self.label_cards.destroy()

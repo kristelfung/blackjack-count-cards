@@ -286,6 +286,10 @@ class Player:
     self.can_double_down = False
     self.can_insurance = False
     self.can_split_pairs = False
+    
+    self.label_hand.destroy()
+    if self.label_split_hand:
+      self.label_split_hand.destroy()
   
   def clear_frame(self, frame):
     """Destroys all widgets in a frame."""
