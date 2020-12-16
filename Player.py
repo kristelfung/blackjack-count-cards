@@ -6,7 +6,7 @@ class Player:
   Player class
 
   Attributes:
-    player_frame: tk.Frame for player's cards
+    parent: the parent App
     hand: Hand class representing player's hand
     split_hand: Hand class if player decides to split
     money: int representing how much money player has remaining
@@ -18,11 +18,9 @@ class Player:
     can_split_pairs: boolean if player can split pairs, set right after hand
         dealt
   """
-  def __init__(self, player_frame, status_frame, action_frame):
+  def __init__(self, parent):
     """Initializes Player and creates "Player" label in player_frame."""
-    self.player_frame = player_frame
-    self.status_frame = status_frame
-    self.action_frame = action_frame
+    self.parent = parent
     self.hand = None
     self.split_hand = None
     self.money = 1000
@@ -37,23 +35,23 @@ class Player:
   
   def create_frame(self):
     """Initialize Player Frame for cards, and Status Frame for bets and balances."""
-    self.player_frame.grid_columnconfigure((0), weight=1)
-    self.player_frame.grid_rowconfigure((0, 1, 2), weight=1)
+    self.parent.player_frame.grid_columnconfigure((0), weight=1)
+    self.parent.player_frame.grid_rowconfigure((0, 1, 2), weight=1)
     
-    player_label = tk.Label(self.player_frame, text="Player")
+    player_label = tk.Label(self.parent.player_frame, text="Player")
     player_label.grid(row=2, column=0, sticky="s")
     
     # Status Frame: Rows 2, 3, 4 for Balance, Bet, Insurance
-    self.status_frame.grid_columnconfigure((0), weight=1)
-    self.status_frame.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
+    self.parent.status_frame.grid_columnconfigure((0), weight=1)
+    self.parent.status_frame.grid_rowconfigure((0, 1, 2, 3, 4), weight=1)
     
-    self.label_wallet = tk.Label(self.status_frame, text="Balance: $" + str(self.money))
+    self.label_wallet = tk.Label(self.parent.status_frame, text="Balance: $" + str(self.money))
     self.label_wallet.grid(row=2, column=0)
     
-    self.label_bet = tk.Label(self.status_frame)
+    self.label_bet = tk.Label(self.parent.status_frame)
     self.label_bet.grid(row=3, column=0)
     
-    self.label_insurance = tk.Label(self.status_frame)
+    self.label_insurance = tk.Label(self.parent.status_frame)
     self.label_insurance.grid(row=4, column=0)
 
   def init_cards(self, hand): # hand is an array of cards
@@ -69,9 +67,9 @@ class Player:
     if self.hand.cards[0][0] == self.hand.cards[1][0]:
       self.can_split_pairs = True
     
-    self.label_hand = tk.Label(self.player_frame, text=self.hand)
+    self.label_hand = tk.Label(self.parent.player_frame, text=self.hand)
     self.label_hand.grid(row=1, column=0, sticky="s")
-    self.label_split_hand = tk.Label(self.player_frame)
+    self.label_split_hand = tk.Label(self.parent.player_frame)
     self.label_split_hand.grid(row=0, column=0, sticky="s")
   
   def update_balance_labels(self):
@@ -97,17 +95,24 @@ class Player:
 
   def ask_bet(self):
     """ Prompts Player to ask for a bet. """
-    self.action_frame.grid_columnconfigure((0, 1), weight=1)
-    self.action_frame.grid_rowconfigure((0, 1), weight=1)
+    self.parent.action_frame.grid_columnconfigure((0, 1), weight=1)
+    self.parent.action_frame.grid_rowconfigure((0, 1), weight=1)
     
-    self.bet_prompt = tk.Label(self.action_frame, text="Place a bet:")
+    self.bet_prompt = tk.Label(self.parent.action_frame, text="Place a bet:")
     self.bet_prompt.grid(row=0, column=0, columnspan=2, pady=5, sticky="s")
-    vcmd = self.player_frame.register(self.validate_bet)
-    self.entry_bet = tk.Entry(self.action_frame, validate="key", validatecommand=(vcmd, '%P'))
+    
+    vcmd = self.parent.player_frame.register(self.validate_bet)
+    
+    self.entry_bet = tk.Entry(self.parent.action_frame, validate="key", validatecommand=(vcmd, '%P'))
     self.entry_bet.grid(row=1, column=0, ipadx=2, ipady=2, sticky="n")
+    self.entry_bet.focus_set()
+    
     var = tk.IntVar()
-    self.button_enter = tk.Button(self.action_frame, text="Enter (↵)", command=lambda: var.set(1))
+    
+    self.button_enter = tk.Button(self.parent.action_frame, text="Enter (↵)", command=lambda: var.set(1))
     self.button_enter.grid(row=1, column=1, pady=0, ipadx=10, ipady=5, sticky="n")
+    i = self.parent.master.bind("<Return>", lambda event: var.set(1))
+    self.parent.bindings.append(["<Return>", i])
     
     self.button_enter.wait_variable(var)
     
@@ -115,9 +120,9 @@ class Player:
     self.update_balance_labels()
     
     # Clear frame and set weights to 0
-    self.clear_frame(self.action_frame)
-    self.action_frame.grid_columnconfigure((0, 1), weight=0)
-    self.action_frame.grid_rowconfigure((0, 1), weight=0)
+    self.parent.clear_frame()
+    self.parent.action_frame.grid_columnconfigure((0, 1), weight=0)
+    self.parent.action_frame.grid_rowconfigure((0, 1), weight=0)
   
   def double_down(self, table):
     """ Double down: Table deals one more card to Player and Player doubles
@@ -143,27 +148,33 @@ class Player:
 
   def ask_insurance(self, table):
     """ Asks Player for insurance bet. """
-    self.action_frame.grid_columnconfigure((0, 1), weight=1)
-    self.action_frame.grid_rowconfigure((0, 1), weight=1)
+    self.parent.action_frame.grid_columnconfigure((0, 1), weight=1)
+    self.parent.action_frame.grid_rowconfigure((0, 1), weight=1)
     
-    self.insurance_prompt = tk.Label(self.action_frame, text="Insurance up to half of\nthe original bet:")
+    self.insurance_prompt = tk.Label(self.parent.action_frame, text="Insurance up to half of\nthe original bet:")
     self.insurance_prompt.grid(row=0, column=0, columnspan=2, pady=5, sticky="s")
     
-    vcmd = self.player_frame.register(self.validate_insurance)
-    self.entry_insurance = tk.Entry(self.action_frame, validate="key", validatecommand=(vcmd, '%P'))
+    vcmd = self.parent.player_frame.register(self.validate_insurance)
+    
+    self.entry_insurance = tk.Entry(self.parent.action_frame, validate="key", validatecommand=(vcmd, '%P'))
     self.entry_insurance.grid(row=1, column=0, ipadx=2, ipady=2, sticky="n")
+    self.entry_insurance.focus_set()
+    
     var = tk.IntVar()
-    self.button_enter = tk.Button(self.action_frame, text="Enter (↵)", command=lambda: var.set(1))
+    
+    self.button_enter = tk.Button(self.parent.action_frame, text="Enter (↵)", command=lambda: var.set(1))
     self.button_enter.grid(row=1, column=1, pady=0, ipadx=10, ipady=5, sticky="n")
+    i = self.parent.master.bind("<Return>", lambda event: var.set(1))
+    self.parent.bindings.append(["<Return>", i])
     
     self.button_enter.wait_variable(var)
     
     self.money -= self.insurance
     self.update_balance_labels()
     
-    self.clear_frame(self.action_frame)
-    self.action_frame.grid_columnconfigure((0, 1), weight=0)
-    self.action_frame.grid_rowconfigure((0, 1), weight=0)
+    self.parent.clear_frame()
+    self.parent.action_frame.grid_columnconfigure((0, 1), weight=0)
+    self.parent.action_frame.grid_rowconfigure((0, 1), weight=0)
 
     self.play_hand(table, self.hand)
 
@@ -187,8 +198,8 @@ class Player:
   def play_hand(self, table, hand, label_curr_hand=None):
     """ Takes in Table, Hand, and optional parameter of Label class
     (label for hand being played) """
-    self.action_frame.grid_columnconfigure((0, 1), weight=1)
-    self.action_frame.grid_rowconfigure((0), weight=1)
+    self.parent.action_frame.grid_columnconfigure((0, 1), weight=1)
+    self.parent.action_frame.grid_rowconfigure((0), weight=1)
     
     stand = tk.IntVar() # To indicate whether player has stood
     
@@ -205,17 +216,22 @@ class Player:
       label_curr_hand = self.label_hand
     # TODO: highlight label (indicate it's the hand's turn)
     
-    self.button_hit = tk.Button(self.action_frame, text="Hit (H)", command=hit)
+    self.button_hit = tk.Button(self.parent.action_frame, text="Hit (H)", command=hit)
     self.button_hit.grid(row=0, column=0, ipadx=5, ipady=5)
-    self.button_stand = tk.Button(self.action_frame, text="Stand (S)", command=lambda: stand.set(1))
+    i = self.parent.master.bind("<h>", lambda event: hit())
+    self.parent.bindings.append(["<h>", i])
+    
+    self.button_stand = tk.Button(self.parent.action_frame, text="Stand (S)", command=lambda: stand.set(1))
     self.button_stand.grid(row=0, column=1, ipadx=5, ipady=5)
+    i = self.parent.master.bind("<s>", lambda event: stand.set(1))
+    self.parent.bindings.append(["<s>", i])
     
     # Wait for stand to be pressed (or forcefully stand due to 21 or bust)
-    self.player_frame.wait_variable(stand)
+    self.parent.player_frame.wait_variable(stand)
     
-    self.clear_frame(self.action_frame)
-    self.action_frame.grid_columnconfigure((0, 1), weight=0)
-    self.action_frame.grid_rowconfigure((0), weight=0)
+    self.parent.clear_frame()
+    self.parent.action_frame.grid_columnconfigure((0, 1), weight=0)
+    self.parent.action_frame.grid_rowconfigure((0), weight=0)
   
   def play(self, table):
     """ First checks double down / split pairs / insurance if applicable. Plays
@@ -225,46 +241,54 @@ class Player:
     
     def double_down_wrapper(table):
       """ Calls double_down, clears buttons and triggers wait variable. """
-      self.clear_frame(self.action_frame)
+      self.parent.clear_frame()
       self.double_down(table)
       action.set(1)
     
     def insurance_wrapper(table):
       """ Calls ask_insurance, clears buttons and triggers wait variable. """
-      self.clear_frame(self.action_frame)
+      self.parent.clear_frame()
       self.ask_insurance(table)
       action.set(1)
     
     def split_pairs_wrapper(table):
       """ Calls split_pairs, clears buttons and triggers wait variable. """
-      self.clear_frame(self.action_frame)
+      self.parent.clear_frame()
       self.split_pairs(table)
       action.set(1)
     
     def play_hand_wrapper(table, hand):
       """ Calls play_hand, clears buttons and triggers wait variable. """
-      self.clear_frame(self.action_frame)
+      self.parent.clear_frame()
       self.play_hand(table, hand)
       action.set(1)
     
-    self.action_frame.grid_columnconfigure((0), weight=1)
-    self.action_frame.grid_rowconfigure((0, 1, 2, 3), weight=0)
+    self.parent.action_frame.grid_columnconfigure((0), weight=1)
+    self.parent.action_frame.grid_rowconfigure((0, 1, 2, 3), weight=0)
     
     if self.can_double_down or self.can_insurance or self.can_split_pairs:
       if self.can_double_down:
-        dd_button = tk.Button(self.action_frame, text="Double Down (D)", command= lambda: double_down_wrapper(table))
+        dd_button = tk.Button(self.parent.action_frame, text="Double Down (D)", command= lambda: double_down_wrapper(table))
         dd_button.grid(row=0, column=0, padx=3, pady=3, ipadx=3, ipady=3)
+        i = self.parent.master.bind("<d>", lambda event: double_down_wrapper(table))
+        self.parent.bindings.append(["<d>", i])
       if self.can_insurance:
-        button_ins = tk.Button(self.action_frame, text="Insurance (I)", command= lambda: insurance_wrapper(table))
+        button_ins = tk.Button(self.parent.action_frame, text="Insurance (I)", command= lambda: insurance_wrapper(table))
         button_ins.grid(row=1, column=0, padx=3, pady=3, ipadx=3, ipady=3)
+        i = self.parent.master.bind("<i>", lambda event: insurance_wrapper(table))
+        self.parent.bindings.append(["<i>", i])
       if self.can_split_pairs:
-        button_sp = tk.Button(self.action_frame, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(table))
+        button_sp = tk.Button(self.parent.action_frame, text="Split Pairs (S)", command= lambda: split_pairs_wrapper(table))
         button_sp.grid(row=2, column=0, padx=3, pady=3, ipadx=3, ipady=3)
-      button_normal = tk.Button(self.action_frame, text="Normal Round (N)", command= lambda: play_hand_wrapper(table, self.hand))
+        i = self.parent.master.bind("<s>", lambda event: split_pairs_wrapper(table))
+        self.parent.bindings.append(["<s>", i])
+      button_normal = tk.Button(self.parent.action_frame, text="Normal Round (N)", command= lambda: play_hand_wrapper(table, self.hand))
       button_normal.grid(row=3, column=0, padx=3, pady=3, ipadx=3, ipady=3)
+      i = self.parent.master.bind("<n>", lambda event: play_hand_wrapper(table, self.hand))
+      self.parent.bindings.append(["<n>", i])
       
       # Wait for user to choose
-      self.player_frame.wait_variable(action)
+      self.parent.player_frame.wait_variable(action)
     else:
       self.play_hand(table, self.hand)
   
@@ -295,9 +319,3 @@ class Player:
     self.label_insurance.config(text="")
     
     self.update_balance_labels()
-  
-  def clear_frame(self, frame):
-    """Destroys all widgets in a frame."""
-    for widget in frame.winfo_children():
-      widget.destroy()
-        

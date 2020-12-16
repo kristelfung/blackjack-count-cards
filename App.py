@@ -6,15 +6,22 @@ from Deck import Deck
 from Table import Table
 
 class App(tk.Frame):
+  """
+  App class
+  
+  Attributes:
+    bindings: list of lists of [key, bind_id]
+  """
   def __init__(self, master=None):
     super(App, self).__init__(master)
+    self.bindings = []
     self.create_window()
     self.init_start_buttons()
   
   def create_window(self):
     """Create a 3x3 grid for the game."""
-    self.master['padx'] = 5
-    self.master['pady'] = 5
+    self.master["padx"] = 5
+    self.master["pady"] = 5
     
     # [0, 0] Status Frame (Count and $$)
     self.status_frame = tk.Frame(self, width=250, height=160, bg="orange")
@@ -51,26 +58,33 @@ class App(tk.Frame):
     self.action_frame.grid_columnconfigure((0, 1), weight=1)
     self.action_frame.grid_rowconfigure((0), weight=1)
     
-    self.start_button = tk.Button(self.action_frame, text="Start (S)", command=self.start)
+    self.start_button = tk.Button(self.action_frame, text="Start (S)", command=self.start, name="start")
     self.start_button.grid(row=0, column=0, ipadx=10, ipady=10)
+    i = self.master.bind("<s>", lambda event: self.start())
+    self.bindings.append(["<s>", i])
     
     self.quit_button = tk.Button(self.action_frame, text="Quit (Q)", command=self.quit)
     self.quit_button.grid(row=0, column=1, ipadx=10, ipady=10)
+    i = self.master.bind("<q>", lambda event: self.quit())
+    self.bindings.append(["<q>", i])
   
   def start(self):
     """ Begins game. Initializes Table with 4 decks, Player, and Dealer. """
-    self.clear_frame(self.action_frame)
+    self.clear_frame()
     self.action_frame.grid_columnconfigure((0, 1), weight=0)
     self.action_frame.grid_rowconfigure((0), weight=0)
     
     self.quit_frame.grid_columnconfigure((0), weight=1)
     self.quit_frame.grid_rowconfigure((0), weight=1)
+    
     self.quit_button = tk.Button(self.quit_frame, text="Quit (Q)", command=self.quit)
     self.quit_button.grid(row=0, column=0, ipadx=5, ipady=5, sticky="ne")
+    i = self.master.bind("<q>", lambda event: self.quit())
+    # Do not add to binded. Button will always exist (not in action frame).
     
-    self.table = Table(4, self.status_frame)
-    self.player = Player(self.player_frame, self.status_frame, self.action_frame)
-    self.dealer = Dealer(self.dealer_frame, self.action_frame)
+    self.table = Table(self, 4)
+    self.player = Player(self)
+    self.dealer = Dealer(self)
     self.play_round()
   
   def play_round(self):
@@ -185,14 +199,15 @@ class App(tk.Frame):
     else:
       self.play_button = tk.Button(self.action_frame, text="Play Again (P)", command=lambda: click.set(1))
       self.play_button.grid(row=2, column=0, ipadx=5, ipady=5, sticky="n")
-      
+      i = self.master.bind("<p>", lambda event: click.set(1))
+      self.bindings.append(["<p>", i])
       self.master.wait_variable(click)
       
       self.reset_all()
       self.play_round()
   
   def reset_all(self):
-    self.clear_frame(self.action_frame)
+    self.clear_frame()
     
     self.player.reset()
     self.dealer.reset()
@@ -200,10 +215,16 @@ class App(tk.Frame):
     self.action_frame.grid_columnconfigure((0), weight=0)
     self.action_frame.grid_rowconfigure((0, 1, 2), weight=0)
     
-  def clear_frame(self, frame):
-    """Destroys all widgets in a frame."""
-    for widget in frame.winfo_children():
+  def clear_frame(self):
+    print(self.bindings)
+    """Destroys and clears all widgets and bindings in action frame."""
+    for widget in self.action_frame.winfo_children():
       widget.destroy()
+    
+    for key, bind_id in self.bindings:
+      self.master.unbind(key, bind_id)
+    
+    self.bindings = []
   
   def quit(self):
     os._exit(1) # Dirty way to terminate despite wait_variables
