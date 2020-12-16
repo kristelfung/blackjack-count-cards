@@ -6,7 +6,7 @@ class Player:
   Player class
 
   Attributes:
-    parent: the parent App
+    parent: the parent App class
     hand: Hand class representing player's hand
     split_hand: Hand class if player decides to split
     money: int representing how much money player has remaining
@@ -55,8 +55,8 @@ class Player:
     self.label_insurance.grid(row=4, column=0)
 
   def init_cards(self, hand): # hand is an array of cards
-    """ Receives an initial hand from the Table. Evaluates to see if hand is
-    a natural or if we can split pairs / double down. """
+    """Receives an initial hand from the Table. Evaluates to see if hand is
+    a natural or if we can split pairs / double down."""
     self.hand = Hand(hand)
     
     if self.hand.value == 21:
@@ -73,7 +73,7 @@ class Player:
     self.label_split_hand.grid(row=0, column=0, sticky="s")
   
   def update_balance_labels(self):
-    """ Updates balance, bet (if it exists), and insurance (if it exists). """
+    """Updates balance, bet (if it exists), and insurance (if it exists)."""
     self.label_wallet.config(text="Balance: $" + str(self.money))
     if self.bet:
       self.label_bet.config(text="Bet: $" + str(self.bet))
@@ -81,7 +81,7 @@ class Player:
       self.label_insurance.config(text="Insurance: $" + str(self.insurance))
   
   def validate_bet(self, val):
-    """ Validates and sets self.bet """
+    """Validates and sets self.bet."""
     if not val:
       self.bet = 0
       return True
@@ -94,7 +94,7 @@ class Player:
       return False
 
   def ask_bet(self):
-    """ Prompts Player to ask for a bet. """
+    """Prompts Player to ask for a bet."""
     self.parent.action_frame.grid_columnconfigure((0, 1), weight=1)
     self.parent.action_frame.grid_rowconfigure((0, 1), weight=1)
     
@@ -125,8 +125,8 @@ class Player:
     self.parent.action_frame.grid_rowconfigure((0, 1), weight=0)
   
   def double_down(self, table):
-    """ Double down: Table deals one more card to Player and Player doubles
-    bet. """
+    """Double down: Table deals one more card to Player and Player doubles
+    bet."""
     self.money -= self.bet
     self.bet *= 2
     self.update_balance_labels()
@@ -134,7 +134,7 @@ class Player:
     self.label_hand.config(text=self.hand)
     
   def validate_insurance(self, val):
-    """ Validates and sets self.insurance """
+    """Validates and sets self.insurance."""
     if not val:
       self.insurance = 0
       return True
@@ -147,7 +147,7 @@ class Player:
       return False
 
   def ask_insurance(self, table):
-    """ Asks Player for insurance bet. """
+    """Asks Player for insurance bet."""
     self.parent.action_frame.grid_columnconfigure((0, 1), weight=1)
     self.parent.action_frame.grid_rowconfigure((0, 1), weight=1)
     
@@ -179,7 +179,7 @@ class Player:
     self.play_hand(table, self.hand)
 
   def split_pairs(self, table):
-    """ Splits pairs and plays both hands. """
+    """Splits pairs and plays both hands."""
     c = self.hand.cards
     self.hand = Hand([c[0]])
     self.split_hand = Hand([c[1]])
@@ -196,15 +196,15 @@ class Player:
     self.play_hand(table, self.hand, self.label_split_hand)
 
   def play_hand(self, table, hand, label_curr_hand=None):
-    """ Takes in Table, Hand, and optional parameter of Label class
-    (label for hand being played) """
+    """Takes in Table, Hand, and optional parameter of Label class
+    (label for hand being played)."""
     self.parent.action_frame.grid_columnconfigure((0, 1), weight=1)
     self.parent.action_frame.grid_rowconfigure((0), weight=1)
     
     stand = tk.IntVar() # To indicate whether player has stood
     
     def hit():
-      """ Player hits and receives one card from Table """
+      """Player hits and receives one card from Table."""
       table.deal_one_card(hand)
       # Update our hand's label of cards AND the table's count
       label_curr_hand.config(text=hand)
@@ -234,31 +234,31 @@ class Player:
     self.parent.action_frame.grid_rowconfigure((0), weight=0)
   
   def play(self, table):
-    """ First checks double down / split pairs / insurance if applicable. Plays
-    round accordingly. """
+    """First checks double down / split pairs / insurance if applicable. Plays
+    round accordingly."""
     
     action = tk.IntVar() # To indicate whether action has been pressed
     
     def double_down_wrapper(table):
-      """ Calls double_down, clears buttons and triggers wait variable. """
+      """Clears buttons, calls double_down, and triggers wait variable."""
       self.parent.clear_frame()
       self.double_down(table)
       action.set(1)
     
     def insurance_wrapper(table):
-      """ Calls ask_insurance, clears buttons and triggers wait variable. """
+      """Clears buttons, calls ask_insurance, and triggers wait variable."""
       self.parent.clear_frame()
       self.ask_insurance(table)
       action.set(1)
     
     def split_pairs_wrapper(table):
-      """ Calls split_pairs, clears buttons and triggers wait variable. """
+      """Clears buttons, calls split_pairs, and triggers wait variable."""
       self.parent.clear_frame()
       self.split_pairs(table)
       action.set(1)
     
     def play_hand_wrapper(table, hand):
-      """ Calls play_hand, clears buttons and triggers wait variable. """
+      """Clears buttons, calls play_hand, and triggers wait variable."""
       self.parent.clear_frame()
       self.play_hand(table, hand)
       action.set(1)
@@ -293,7 +293,8 @@ class Player:
       self.play_hand(table, self.hand)
   
   def is_bust(self):
-    """ Returns whether Player has bust, taking into account split hands. """
+    """Returns whether Player has totally bust, taking into account split
+    hands."""
     if self.split_hand:
       if self.split_hand.bust and self.hand.bust:
         return True
@@ -302,7 +303,7 @@ class Player:
     return False
   
   def reset(self):
-    """ Resets Player for the next round. """
+    """Resets Player for the next round."""
     self.hand = None
     self.split_hand = None
     self.bet = 0

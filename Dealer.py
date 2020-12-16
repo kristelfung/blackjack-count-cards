@@ -37,6 +37,7 @@ class Dealer:
     self.label_cards.grid(row=1, column=0, rowspan=2, sticky="n")
 
   def play(self, table):
+    """Play as Dealer - hit until 17 or more is reached."""
     self.label_dealer_hits = tk.Label(self.parent.action_frame)
     self.label_dealer_hits.grid(row=0, column=0, sticky="s")
     self.label_cards.config(text=self.hand)
@@ -49,5 +50,6 @@ class Dealer:
     self.label_dealer_hits.config(text="Dealer hits " + str(hits) + " times.")
 
   def reset(self):
+    """Resets Dealer's hand."""
     self.hand = None
     self.label_cards.destroy()

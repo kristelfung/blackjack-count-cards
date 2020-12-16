@@ -13,6 +13,7 @@ class App(tk.Frame):
     bindings: list of lists of [key, bind_id]
   """
   def __init__(self, master=None):
+    """Initialize application, creates window and start buttons."""
     super(App, self).__init__(master)
     self.bindings = []
     self.create_window()
@@ -54,7 +55,7 @@ class App(tk.Frame):
     self.player_frame.grid_propagate(False)
 
   def init_start_buttons(self):
-    """Initializes Start and Quit button, assigns each weight of 1."""
+    """Initializes Start and Quit button."""
     self.action_frame.grid_columnconfigure((0, 1), weight=1)
     self.action_frame.grid_rowconfigure((0), weight=1)
     
@@ -69,7 +70,7 @@ class App(tk.Frame):
     self.bindings.append(["<q>", i])
   
   def start(self):
-    """ Begins game. Initializes Table with 4 decks, Player, and Dealer. """
+    """Begins game. Initializes Table with 4 decks, Player, and Dealer."""
     self.clear_frame()
     self.action_frame.grid_columnconfigure((0, 1), weight=0)
     self.action_frame.grid_rowconfigure((0), weight=0)
@@ -88,7 +89,7 @@ class App(tk.Frame):
     self.play_round()
   
   def play_round(self):
-    """ Handles an entire round between Player and Dealer. """
+    """Handles an entire round between Player and Dealer."""
     self.table.check_shoe_size()
     self.player.ask_bet()
     self.table.deal_cards(self.dealer, self.player)
@@ -103,7 +104,7 @@ class App(tk.Frame):
   
   def _evaluate_round(self):
     """Evaluates the round given that player has not completely busted.
-    Determines winner and resolves outstanding bets. Displays result. """
+    Determines winner and resolves outstanding bets. Displays result."""
     self.res = tk.Label(self.action_frame)
     self.res.grid(row=1, column=0, sticky="n")
     self.action_frame.grid_columnconfigure((0), weight=1)
@@ -207,6 +208,7 @@ class App(tk.Frame):
       self.play_round()
   
   def reset_all(self):
+    """Resets frame, player, and dealer."""
     self.clear_frame()
     
     self.player.reset()
@@ -216,7 +218,6 @@ class App(tk.Frame):
     self.action_frame.grid_rowconfigure((0, 1, 2), weight=0)
     
   def clear_frame(self):
-    print(self.bindings)
     """Destroys and clears all widgets and bindings in action frame."""
     for widget in self.action_frame.winfo_children():
       widget.destroy()
@@ -227,4 +228,5 @@ class App(tk.Frame):
     self.bindings = []
   
   def quit(self):
+    """Exits application."""
     os._exit(1) # Dirty way to terminate despite wait_variables

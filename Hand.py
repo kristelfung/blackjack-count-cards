@@ -10,6 +10,7 @@ class Hand:
     natural: boolean indicating whether hand is a natural or not
   """
   def __init__(self, hand):
+    """Initializes a Hand and calculates the value."""
     self.cards = hand
     self.value = None
     self.bust = False
@@ -18,6 +19,7 @@ class Hand:
     self.calculate_hand()
 
   def __repr__(self):
+    """Prints out the cards w/ symbols."""
     msg = ""
     for card in self.cards:
       msg += card[2] + " "
@@ -25,6 +27,7 @@ class Hand:
     return msg
 
   def calculate_hand(self):
+    """Calculates value of all cards in hand."""
     self.value = 0
     aces = 0
     for elem in self.cards:
@@ -54,5 +57,6 @@ class Hand:
       self.blackjack = True
 
   def receive_cards(self, cards):
+    """Receives a list of cards to add to hand."""
     self.cards += cards
     self.calculate_hand()
