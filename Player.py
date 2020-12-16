@@ -62,7 +62,7 @@ class Player:
     if self.hand.value == 21:
       self.hand.natural = True
     if (self.hand.value == 9 or self.hand.value == 10 or
-        self.hand.value == 11):
+        self.hand.value == 11) and self.money >= self.bet:
       self.can_double_down = True
     if self.hand.cards[0][0] == self.hand.cards[1][0]:
       self.can_split_pairs = True
