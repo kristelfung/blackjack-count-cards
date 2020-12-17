@@ -34,13 +34,11 @@ class Player:
     self.create_frame()
   
   def create_frame(self):
-    """Initialize Player Frame for cards, and Status Frame for bets and balances."""
-    # Player Frame: "Player" label and cards.
+    """Create "Player" tk.Label in player_frame. Create bets and balances
+    tk.Label in status_frame."""
+    # Player Frame: "Player" label.
     self.parent.player_frame.grid_columnconfigure((0), weight=1)
     self.parent.player_frame.grid_rowconfigure((0, 1), weight=1)
-    
-    self.label_hand = tk.Label(self.parent.player_frame)
-    self.label_hand.grid(row=0, column=0, sticky="s")
     
     player_label = tk.Label(self.parent.player_frame, text="Player")
     player_label.grid(row=1, column=0, sticky="s")
@@ -59,8 +57,12 @@ class Player:
     self.label_insurance.grid(row=4, column=0)
 
   def init_cards(self, hand): # hand is an array of cards
-    """Receives an initial hand from the Table. Evaluates to see if hand is
-    a natural or if we can split pairs / double down."""
+    """Receives an initial hand from the Table. Creates tk.Label to display
+    cards. Evaluates to see if hand is a natural or if we can split pairs /
+    double down."""
+    self.label_hand = tk.Label(self.parent.player_frame)
+    self.label_hand.grid(row=0, column=0, sticky="s")
+    
     self.hand = Hand(self, hand)
     
     if self.hand.value == 21:
@@ -314,7 +316,7 @@ class Player:
     self.can_insurance = False
     self.can_split_pairs = False
     
-#    self.label_hand.destroy()
+    self.label_hand.destroy()
 #    self.label_split_hand.destroy()
     
     self.label_bet.config(text="")

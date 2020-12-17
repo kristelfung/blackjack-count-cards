@@ -16,19 +16,20 @@ class Dealer:
     self.create_frame()
   
   def create_frame(self):
-    """Initialize Dealer Frame for cards."""
+    """Create "Dealer" tk.Label in dealer_frame."""
     self.parent.dealer_frame.grid_columnconfigure((0), weight=1)
     self.parent.dealer_frame.grid_rowconfigure((0, 1, 2), weight=1)
 
     dealer_label = tk.Label(self.parent.dealer_frame, text="Dealer")
     dealer_label.grid(row=0, column=0, sticky="n")
-    
-    self.label_hand = tk.Label(self.parent.dealer_frame)
-    self.label_hand.grid(row=1, column=0, sticky="s")
 
   def init_cards(self, hand, player):
-    """ Receives an initial hand from the table. Evaluates to see if Dealer
-    has natural, and if Player can buy insurance."""
+    """ Receives an initial hand from the table. Creates tk.Label to display
+    cards. Evaluates to see if Dealer has natural, and if Player can buy
+    insurance."""
+    self.label_hand = tk.Label(self.parent.dealer_frame)
+    self.label_hand.grid(row=1, column=0, sticky="s")
+    
     self.hand = Hand(self, hand)
     
     if self.hand.value == 21:
@@ -53,4 +54,4 @@ class Dealer:
   def reset(self):
     """Resets Dealer's hand."""
     self.hand = None
-    #self.label_hand.destroy()
+    self.label_hand.destroy()
