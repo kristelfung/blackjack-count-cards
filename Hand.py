@@ -32,20 +32,14 @@ class Hand:
   def display_one_card(self):
     """Displays first card face up, second card face down (needed for
     Dealer)."""
-    filename = "images/" + self.cards[0][2] + ".jpg"
-    image = Image.open(filename)
-    image.thumbnail((70, 105), Image.ANTIALIAS)
-    image.save(filename, quality=95)
-    img = ImageTk.PhotoImage(image)
+    path = "images/" + self.cards[0][2] + ".jpg"
+    img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
     label_card = tk.Label(self.parent.label_hand, image=img)
     label_card.photo = img
     label_card.grid(row=0, column=0)
     
-    filename = "images/back.jpg"
-    image = Image.open(filename)
-    image.thumbnail((70, 105), Image.ANTIALIAS)
-    image.save(filename, quality=95)
-    img = ImageTk.PhotoImage(image)
+    path = "images/back.jpg"
+    img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
     label_card = tk.Label(self.parent.label_hand, image=img)
     label_card.photo = img
     label_card.grid(row=0, column=1)
@@ -56,11 +50,8 @@ class Hand:
   def update_display(self):
     """Calculates value of hand. Displays cards and hand value."""
     for i in range(len(self.cards)):
-      filename = "images/" + self.cards[i][2] + ".jpg"
-      image = Image.open(filename)
-      image.thumbnail((70, 105), Image.ANTIALIAS)
-      image.save(filename, quality=95)
-      img = ImageTk.PhotoImage(image)
+      path = "images/" + self.cards[i][2] + ".jpg"
+      img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
       label_card = tk.Label(self.parent.label_hand, image=img)
       label_card.photo = img
       label_card.grid(row=0, column=i)

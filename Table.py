@@ -46,12 +46,7 @@ class Table:
     self.label_deck = tk.Label(self.parent.table_frame, text="Shoe (" + str(len(self.shoe)) + ")")
     self.label_deck.grid(row=0, column=0)
     
-    filename = "images/back.jpg"
-    image = Image.open(filename)
-    image.thumbnail((70, 105), Image.ANTIALIAS)
-    image.save(filename, quality=95)
-    img = ImageTk.PhotoImage(image)
-    
+    img = ImageTk.PhotoImage(Image.open("images/back.jpg").resize((70, 105)))
     self.label_deck_img = tk.Label(self.parent.table_frame, image=img)
     self.label_deck_img.photo = img
     self.label_deck_img.grid(row=1, column=0)
