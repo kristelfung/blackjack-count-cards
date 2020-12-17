@@ -314,7 +314,7 @@ class Player:
     self.can_insurance = False
     self.can_split_pairs = False
     
-    self.label_hand.destroy()
+#    self.label_hand.destroy()
 #    self.label_split_hand.destroy()
     
     self.label_bet.config(text="")

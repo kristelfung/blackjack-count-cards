@@ -53,4 +53,4 @@ class Dealer:
   def reset(self):
     """Resets Dealer's hand."""
     self.hand = None
-    self.label_hand.destroy()
+    #self.label_hand.destroy()
