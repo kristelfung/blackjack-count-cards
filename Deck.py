@@ -3,13 +3,13 @@ class Deck:
   Deck class
 
   Attributes:
-    cards: list of cards in the form [['A', 1, 'A♠'], ['A', 2, 'A♥'], ...]
+    cards: list of cards in the form [['A', 3, 'AS'], ['A', 2, 'AH'], ...]
   """
   
   def __init__(self):
     self.cards = [] 
     
-    suits = ["♦", "♣", "♥", "♠"]
+    suits = ["D", "C", "H", "S"] # Diamond, Club, Heart, Spade
     for i in range(2, 11):
       for j in range(len(suits)):
         self.cards.append([i, j, str(i) + suits[j]])

@@ -25,17 +25,17 @@ class App(tk.Frame):
     self.master["pady"] = 5
     
     # [0, 0] Status Frame (Count and $$)
-    self.status_frame = tk.Frame(self, width=250, height=160, bg="orange")
+    self.status_frame = tk.Frame(self, width=250, height=200, bg="orange")
     self.status_frame.grid(row=0, column=0, rowspan=2, sticky="n")
     self.status_frame.grid_propagate(False)
     
     # [0, 1] Dealer Frame
-    self.dealer_frame = tk.Frame(self, width=250, height=140, bg="red")
+    self.dealer_frame = tk.Frame(self, width=250, height=200, bg="red")
     self.dealer_frame.grid(row=0, column=1)
     self.dealer_frame.grid_propagate(False)
     
     # [0, 2] Quit Frame
-    self.quit_frame = tk.Frame(self, width=250, height=140, bg="blue")
+    self.quit_frame = tk.Frame(self, width=250, height=200, bg="blue")
     self.quit_frame.grid(row=0, column=2)
     self.quit_frame.grid_propagate(False)
     
@@ -49,9 +49,9 @@ class App(tk.Frame):
     self.table_frame.grid(row=1, column=2)
     self.table_frame.grid_propagate(False)
     
-    # [2, 1] Player Frame
-    self.player_frame = tk.Frame(self, width=250, height=140, bg="purple")
-    self.player_frame.grid(row=2, column=1)
+    # [2, 0-1-2] Player Frame
+    self.player_frame = tk.Frame(self, width=750, height=200, bg="purple")
+    self.player_frame.grid(row=2, column=0, columnspan=3)
     self.player_frame.grid_propagate(False)
 
   def init_start_buttons(self):

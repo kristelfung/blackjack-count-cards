@@ -1,6 +1,7 @@
 import tkinter as tk
 import random
 from Deck import Deck
+from PIL import ImageTk, Image
 
 class Table:
   """
@@ -8,7 +9,7 @@ class Table:
 
   Attributes:
     parent: the parent App class
-    shoe: list of cards in the form [['A', 3, 'A♠'], ['A', 2, 'A♥'], ...]
+    shoe: list of cards in the form [['A', 3, 'AS'], ['A', 2, 'AH'], ...]
     count: current running count
     shoe_size: default number of cards in the shoe
     num_decks: number of decks in the shoe
@@ -33,6 +34,7 @@ class Table:
     """Creates window for Table, displaying Running Count and True Count."""
     self.parent.status_frame.grid_columnconfigure((0), weight=1)
     self.parent.status_frame.grid_rowconfigure((0, 1), weight=1)
+    
     self.label_rc = tk.Label(self.parent.status_frame, text="Running Count is " + str(self.count))
     self.label_rc.grid(row=0, column=0)
     self.label_tc = tk.Label(self.parent.status_frame, text="True Count is " + str(self.count / 4))
@@ -40,8 +42,19 @@ class Table:
     
     self.parent.table_frame.grid_columnconfigure((0), weight=1)
     self.parent.table_frame.grid_rowconfigure((0), weight=1)
+    
     self.label_deck = tk.Label(self.parent.table_frame, text="Shoe (" + str(len(self.shoe)) + ")")
     self.label_deck.grid(row=0, column=0)
+    
+    filename = "images/back.jpg"
+    image = Image.open(filename)
+    image.thumbnail((70, 105), Image.ANTIALIAS)
+    image.save(filename, quality=95)
+    img = ImageTk.PhotoImage(image)
+    
+    self.label_deck_img = tk.Label(self.parent.table_frame, image=img)
+    self.label_deck_img.photo = img
+    self.label_deck_img.grid(row=1, column=0)
     
   def shuffle(self):
     """Shuffles the shoe."""

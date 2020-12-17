@@ -35,11 +35,15 @@ class Player:
   
   def create_frame(self):
     """Initialize Player Frame for cards, and Status Frame for bets and balances."""
+    # Player Frame: "Player" label and cards.
     self.parent.player_frame.grid_columnconfigure((0), weight=1)
-    self.parent.player_frame.grid_rowconfigure((0, 1, 2), weight=1)
+    self.parent.player_frame.grid_rowconfigure((0, 1), weight=1)
+    
+    self.label_hand = tk.Label(self.parent.player_frame)
+    self.label_hand.grid(row=0, column=0, sticky="s")
     
     player_label = tk.Label(self.parent.player_frame, text="Player")
-    player_label.grid(row=2, column=0, sticky="s")
+    player_label.grid(row=1, column=0, sticky="s")
     
     # Status Frame: Rows 2, 3, 4 for Balance, Bet, Insurance
     self.parent.status_frame.grid_columnconfigure((0), weight=1)
@@ -57,7 +61,7 @@ class Player:
   def init_cards(self, hand): # hand is an array of cards
     """Receives an initial hand from the Table. Evaluates to see if hand is
     a natural or if we can split pairs / double down."""
-    self.hand = Hand(hand)
+    self.hand = Hand(self, hand)
     
     if self.hand.value == 21:
       self.hand.natural = True
@@ -67,10 +71,10 @@ class Player:
     if self.hand.cards[0][0] == self.hand.cards[1][0]:
       self.can_split_pairs = True
     
-    self.label_hand = tk.Label(self.parent.player_frame, text=self.hand)
-    self.label_hand.grid(row=1, column=0, sticky="s")
-    self.label_split_hand = tk.Label(self.parent.player_frame)
-    self.label_split_hand.grid(row=0, column=0, sticky="s")
+    self.hand.update_display()
+# 1---=====================================================================================================================
+#    self.label_split_hand = tk.Label(self.parent.player_frame)
+#    self.label_split_hand.grid(row=0, column=0, sticky="s")
   
   def update_balance_labels(self):
     """Updates balance, bet (if it exists), and insurance (if it exists)."""
@@ -131,7 +135,6 @@ class Player:
     self.bet *= 2
     self.update_balance_labels()
     table.deal_one_card(self.hand)
-    self.label_hand.config(text=self.hand)
     
   def validate_insurance(self, val):
     """Validates and sets self.insurance."""
@@ -187,10 +190,10 @@ class Player:
     self.money -= self.bet
     
     # Update text for split hand
-    self.label_split_hand.config(text=self.split_hand)
+    self.split_hand.update_display()
     
     # Update Label for original hand
-    self.label_hand.config(text=self.hand)
+    self.hand.update_display()
     
     self.play_hand(table, self.split_hand, self.label_hand)
     self.play_hand(table, self.hand, self.label_split_hand)
@@ -206,8 +209,6 @@ class Player:
     def hit():
       """Player hits and receives one card from Table."""
       table.deal_one_card(hand)
-      # Update our hand's label of cards AND the table's count
-      label_curr_hand.config(text=hand)
 
       if hand.bust or hand.blackjack:
         stand.set(1)
@@ -314,7 +315,7 @@ class Player:
     self.can_split_pairs = False
     
     self.label_hand.destroy()
-    self.label_split_hand.destroy()
+#    self.label_split_hand.destroy()
     
     self.label_bet.config(text="")
     self.label_insurance.config(text="")
