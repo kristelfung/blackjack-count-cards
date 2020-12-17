@@ -36,9 +36,6 @@ class Dealer:
     if self.hand.cards[0][0] == "A":
       player.can_insurance = True
     
-    self.label_hand = tk.Label(self.parent.dealer_frame)
-    self.label_hand.grid(row=1, column=0, sticky="n")
-    
     self.hand.display_one_card()
 
   def play(self, table):
