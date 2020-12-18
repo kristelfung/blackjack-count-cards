@@ -50,14 +50,28 @@ class Hand:
     self.label_count.grid(row=1, column=0, columnspan=len(self.cards))
 
   def update_display(self):
-    """Calculates value of hand. Displays cards and hand value."""
+    """Displays cards and hand value."""
+    # Create our card window
+    x_offset = 15
+    y_offset = 0
+    x_size = 70
+    y_size = 105
+    card_window_size = (x_size + (len(self.cards)-1) * x_offset, y_size)
+    canvas = Image.new("RGB", (card_window_size), (255, 255, 255))
+    
+    # Paste cards in
     for i in range(len(self.cards)):
       path = "images/" + self.cards[i][1] + ".jpg"
-      img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
-      label_card = tk.Label(self.label, image=img)
-      label_card.photo = img
-      label_card.grid(row=0, column=i)
-  
+      img = Image.open(path).resize((70, 105))
+      Image.Image.paste(canvas, img, (i*x_offset, y_offset))
+
+    # Render the pasted cards
+    img = ImageTk.PhotoImage(canvas)
+    label_card = tk.Label(self.label, image=img)
+    label_card.photo = img
+    label_card.grid(row=0, column=0)
+    
+    # Display hand value
     self.label_count.config(text="(" + str(self.value) + ")")
     self.label_count.grid(row=1, column=0, columnspan=len(self.cards))
 
