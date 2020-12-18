@@ -40,8 +40,8 @@ class Player:
     self.parent.player_frame.grid_columnconfigure((0), weight=1)
     self.parent.player_frame.grid_rowconfigure((0, 1), weight=1)
     
-    player_label = tk.Label(self.parent.player_frame, text="Player")
-    player_label.grid(row=1, column=0, sticky="s")
+    self.player_label = tk.Label(self.parent.player_frame, text="Player")
+    self.player_label.grid(row=1, column=0, sticky="s")
     
     # Status Frame: Rows 2, 3, 4 for Balance, Bet, Insurance
     self.parent.status_frame.grid_columnconfigure((0), weight=1)
@@ -61,7 +61,7 @@ class Player:
     cards. Evaluates to see if hand is a natural or if we can split pairs /
     double down."""
     self.label_hand = tk.Label(self.parent.player_frame)
-    self.label_hand.grid(row=0, column=0, sticky="s")
+    self.label_hand.grid(row=0, column=0, columnspan=2, sticky="s")
     
     self.hand = Hand(self, hand, self.label_hand)
     
@@ -187,9 +187,16 @@ class Player:
     
     # Recreate our hand label and create split hand label.
     self.label_hand = tk.Label(self.parent.player_frame)
-    self.label_hand.grid(row=0, column=0, sticky="nesw")
+    self.label_hand.grid(row=0, column=0, sticky="s")
+    
     self.label_split_hand = tk.Label(self.parent.player_frame)
-    self.label_split_hand.grid(row=0, column=1, sticky="nesw")
+    self.label_split_hand.grid(row=0, column=1, sticky="s")
+    
+    # Make sure columns are equal weight
+    self.parent.player_frame.grid_columnconfigure((0, 1), weight=1)
+    
+    # Center "Player" label.
+    self.player_label.grid(columnspan=2)
     
     c = self.hand.cards
     self.hand = Hand(self, [c[0]], self.label_hand)
