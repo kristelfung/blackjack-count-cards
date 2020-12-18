@@ -142,7 +142,7 @@ class Player:
       return True
     try:
       self.insurance = int(val)
-      if self.insurance > self.bet / 2:
+      if self.insurance > self.bet / 2 or self.insurance > self.money:
         return False
       return True
     except ValueError:
