@@ -210,12 +210,13 @@ class Player:
     # Update Label for original hand
     self.hand.update_display()
     
-    self.play_hand(table, self.hand, self.label_split_hand)
-    self.play_hand(table, self.split_hand, self.label_hand)
+    self.play_hand(table, self.hand, self.label_hand)
+    self.play_hand(table, self.split_hand, self.label_split_hand)
 
   def play_hand(self, table, hand, label_curr_hand=None):
     """Takes in Table, Hand, and optional parameter of Label class
     (label for hand being played)."""
+    # Set action frame grid weights
     self.parent.action_frame.grid_columnconfigure((0, 1), weight=1)
     self.parent.action_frame.grid_rowconfigure((0), weight=1)
     
@@ -228,9 +229,9 @@ class Player:
       if hand.bust or hand.blackjack:
         stand.set(1)
       
-    if not label_curr_hand:
-      label_curr_hand = self.label_hand
-    # TODO: highlight label (indicate it's the hand's turn)
+    # If we're in a split hand play
+    if label_curr_hand:
+      label_curr_hand.config(borderwidth=3, relief="solid")
     
     self.button_hit = tk.Button(self.parent.action_frame, text="Hit (H)", command=hit)
     self.button_hit.grid(row=0, column=0, ipadx=5, ipady=5)
@@ -245,7 +246,14 @@ class Player:
     # Wait for stand to be pressed (or forcefully stand due to 21 or bust)
     self.parent.player_frame.wait_variable(stand)
     
+    # Clear frame
     self.parent.clear_frame()
+    
+    # If we're in a split hand play, remove border
+    if label_curr_hand:
+      label_curr_hand.config(borderwidth=0)
+    
+    # Reset action frame grid weights
     self.parent.action_frame.grid_columnconfigure((0, 1), weight=0)
     self.parent.action_frame.grid_rowconfigure((0), weight=0)
   
@@ -331,8 +339,11 @@ class Player:
     
     self.label_hand.destroy()
     
-    if self.label_split_hand:
-      self.label_split_hand.destroy()
+    try:
+      if self.label_split_hand:
+        self.label_split_hand.destroy()
+    except:
+      pass
     
     self.label_bet.config(text="")
     self.label_insurance.config(text="")
