@@ -9,7 +9,7 @@ class Table:
 
   Attributes:
     parent: the parent App class
-    shoe: list of cards in the form [['A', 3, 'AS'], ['A', 2, 'AH'], ...]
+    shoe: list of cards in the form [['A', 'AS'], ['A', 'AH'], ...]
     count: current running count
     shoe_size: default number of cards in the shoe
     num_decks: number of decks in the shoe

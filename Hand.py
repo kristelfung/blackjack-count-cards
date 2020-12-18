@@ -7,7 +7,7 @@ class Hand:
 
   Attributes:
     parent: the parent Player or Dealer class
-    cards: a list of cards in the form [['A', 3, 'AS'], ['A', 2, 'AH'], ...]
+    cards: a list of cards in the form [['A', 'AS'], ['A', 'AH'], ...]
     label: the tk.Label for current hand, master of label_card and label_count
     value: int representing the value of the hand
     bust: boolean indicating whether hand is bust or not
@@ -34,7 +34,7 @@ class Hand:
   def display_one_card(self):
     """Displays first card face up, second card face down (needed for
     Dealer)."""
-    path = "images/" + self.cards[0][2] + ".jpg"
+    path = "images/" + self.cards[0][1] + ".jpg"
     img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
     label_card = tk.Label(self.label, image=img)
     label_card.photo = img
@@ -52,7 +52,7 @@ class Hand:
   def update_display(self):
     """Calculates value of hand. Displays cards and hand value."""
     for i in range(len(self.cards)):
-      path = "images/" + self.cards[i][2] + ".jpg"
+      path = "images/" + self.cards[i][1] + ".jpg"
       img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
       label_card = tk.Label(self.label, image=img)
       label_card.photo = img
