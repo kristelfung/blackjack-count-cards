@@ -1,5 +1,20 @@
 # Blackjack - Counting Cards
 
+Ever watched the movie [21](https://en.wikipedia.org/wiki/21_(2008_film))? In short, MIT students profit from playing Blackjack in Casinos via card counting. You can use this Blackjack game to simulate the experience, albeit it will be far less exciting and you are earning fake money.
+
+The game keeps track of true count and running count for you using the Hi-Lo method, allowing the player to place bets accordingly.
+
+### Prerequisites
+
+Need [Python](https://www.python.org/downloads/) and [Pillow](https://pillow.readthedocs.io/en/stable/installation.html).
+
+### Getting Started
+
+Navigate to the directory and run
+```
+python3 blackjack.py
+```
+
 ### Rules
 [Bicycle Cards](https://bicyclecards.com/how-to-play/blackjack/)
 
