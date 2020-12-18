@@ -30,7 +30,7 @@ class Dealer:
     self.label_hand = tk.Label(self.parent.dealer_frame)
     self.label_hand.grid(row=1, column=0, sticky="s")
     
-    self.hand = Hand(self, hand)
+    self.hand = Hand(self, hand, self.label_hand)
     
     if self.hand.value == 21:
       self.hand.natural = True

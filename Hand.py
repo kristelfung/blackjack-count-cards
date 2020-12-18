@@ -8,15 +8,17 @@ class Hand:
   Attributes:
     parent: the parent Player or Dealer class
     cards: a list of cards in the form [['A', 3, 'AS'], ['A', 2, 'AH'], ...]
+    label: the tk.Label for current hand, master of label_card and label_count
     value: int representing the value of the hand
     bust: boolean indicating whether hand is bust or not
     blackjack: boolean indicating whether hand is blackjack or not
     natural: boolean indicating whether hand is a natural or not
   """
-  def __init__(self, parent, hand):
+  def __init__(self, parent, hand, label):
     """Initializes a Hand and calculates the value."""
     self.parent = parent
     self.cards = hand
+    self.label = label
     self.value = None
     self.bust = False
     self.blackjack = False
@@ -27,20 +29,20 @@ class Hand:
   
   def create_window(self):
     """Creates label for hand's value."""
-    self.label_count = tk.Label(self.parent.label_hand)
+    self.label_count = tk.Label(self.label)
   
   def display_one_card(self):
     """Displays first card face up, second card face down (needed for
     Dealer)."""
     path = "images/" + self.cards[0][2] + ".jpg"
     img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
-    label_card = tk.Label(self.parent.label_hand, image=img)
+    label_card = tk.Label(self.label, image=img)
     label_card.photo = img
     label_card.grid(row=0, column=0)
     
     path = "images/back.jpg"
     img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
-    label_card = tk.Label(self.parent.label_hand, image=img)
+    label_card = tk.Label(self.label, image=img)
     label_card.photo = img
     label_card.grid(row=0, column=1)
     
@@ -52,7 +54,7 @@ class Hand:
     for i in range(len(self.cards)):
       path = "images/" + self.cards[i][2] + ".jpg"
       img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
-      label_card = tk.Label(self.parent.label_hand, image=img)
+      label_card = tk.Label(self.label, image=img)
       label_card.photo = img
       label_card.grid(row=0, column=i)
   

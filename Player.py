@@ -63,7 +63,7 @@ class Player:
     self.label_hand = tk.Label(self.parent.player_frame)
     self.label_hand.grid(row=0, column=0, sticky="s")
     
-    self.hand = Hand(self, hand)
+    self.hand = Hand(self, hand, self.label_hand)
     
     if self.hand.value == 21:
       self.hand.natural = True
@@ -74,9 +74,6 @@ class Player:
       self.can_split_pairs = True
     
     self.hand.update_display()
-# 1---=====================================================================================================================
-#    self.label_split_hand = tk.Label(self.parent.player_frame)
-#    self.label_split_hand.grid(row=0, column=0, sticky="s")
   
   def update_balance_labels(self):
     """Updates balance, bet (if it exists), and insurance (if it exists)."""
@@ -185,9 +182,18 @@ class Player:
 
   def split_pairs(self, table):
     """Splits pairs and plays both hands."""
+    # Destroy the previous label for our singular hand.
+    self.label_hand.destroy()
+    
+    # Recreate our hand label and create split hand label.
+    self.label_hand = tk.Label(self.parent.player_frame)
+    self.label_hand.grid(row=0, column=0, sticky="nesw")
+    self.label_split_hand = tk.Label(self.parent.player_frame)
+    self.label_split_hand.grid(row=0, column=1, sticky="nesw")
+    
     c = self.hand.cards
-    self.hand = Hand([c[0]])
-    self.split_hand = Hand([c[1]])
+    self.hand = Hand(self, [c[0]], self.label_hand)
+    self.split_hand = Hand(self, [c[1]], self.label_split_hand)
     self.split_hand_bet = self.bet
     self.money -= self.bet
     
@@ -197,8 +203,8 @@ class Player:
     # Update Label for original hand
     self.hand.update_display()
     
-    self.play_hand(table, self.split_hand, self.label_hand)
     self.play_hand(table, self.hand, self.label_split_hand)
+    self.play_hand(table, self.split_hand, self.label_hand)
 
   def play_hand(self, table, hand, label_curr_hand=None):
     """Takes in Table, Hand, and optional parameter of Label class
@@ -317,7 +323,9 @@ class Player:
     self.can_split_pairs = False
     
     self.label_hand.destroy()
-#    self.label_split_hand.destroy()
+    
+    if self.label_split_hand:
+      self.label_split_hand.destroy()
     
     self.label_bet.config(text="")
     self.label_insurance.config(text="")
