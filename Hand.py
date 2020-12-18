@@ -34,18 +34,31 @@ class Hand:
   def display_one_card(self):
     """Displays first card face up, second card face down (needed for
     Dealer)."""
+    # Create our card window
+    x_offset = 15
+    y_offset = 0
+    x_size = 70
+    y_size = 105
+    card_window_size = (x_size + (len(self.cards)-1) * x_offset, y_size)
+    canvas = Image.new("RGB", (card_window_size), (255, 255, 255))
+    
+    # Paste first card in
     path = "images/" + self.cards[0][1] + ".jpg"
-    img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
+    img = Image.open(path).resize((70, 105))
+    Image.Image.paste(canvas, img, (0*x_offset, y_offset))
+    
+    # Paste back of second card in
+    path = "images/back.jpg"
+    img = Image.open(path).resize((70, 105))
+    Image.Image.paste(canvas, img, (1*x_offset, y_offset))
+    
+    # Render the pasted cards
+    img = ImageTk.PhotoImage(canvas)
     label_card = tk.Label(self.label, image=img)
     label_card.photo = img
     label_card.grid(row=0, column=0)
     
-    path = "images/back.jpg"
-    img = ImageTk.PhotoImage(Image.open(path).resize((70, 105)))
-    label_card = tk.Label(self.label, image=img)
-    label_card.photo = img
-    label_card.grid(row=0, column=1)
-    
+    # Display hand value
     self.label_count.config(text="(" + str(self.card_value(self.cards[0])) + ")")
     self.label_count.grid(row=1, column=0, columnspan=len(self.cards))
 
