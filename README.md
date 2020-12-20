@@ -4,7 +4,7 @@ Ever watched the movie [21](https://en.wikipedia.org/wiki/21_(2008_film))? In sh
 
 The game keeps track of true count and running count using the Hi-Lo method, allowing the player to place bets accordingly.
 
-![Preview Image](./images/preview.png)
+![Preview Image](./images/preview.gif)
 
 ### Demo
 
