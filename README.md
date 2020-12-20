@@ -4,13 +4,19 @@ Ever watched the movie [21](https://en.wikipedia.org/wiki/21_(2008_film))? In sh
 
 The game keeps track of true count and running count using the Hi-Lo method, allowing the player to place bets accordingly.
 
+<img src="./images/preview.png" width="400" />
+
+### Demo
+
+[Link to Demo](https://repl.it/@kristelfung/blackjack-count-cards#README.md) hosted on repl.it. Click Run to start the demo, but for a better experience you should run the app natively.
+
 ### Prerequisites
 
 Need [Python](https://www.python.org/downloads/) and [Pillow](https://pillow.readthedocs.io/en/stable/installation.html).
 
 ### Getting Started
 
-Navigate to the directory and run
+Clone the repository, navigate to the directory and run
 ```
 python3 blackjack.py
 ```
